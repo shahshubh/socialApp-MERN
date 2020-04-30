@@ -22,10 +22,8 @@ exports.createPostValidator = (req,res,next) => {
 
 exports.userSignupValidator = (req,res,next) => {
     req.check('name',"Please enter a name").notEmpty();
-
-
+    
     req.check('email',"Please enter an valid email").isEmail();
-
     //password
     req.check('password',"Please enter a Password").notEmpty();
     req.check('password')

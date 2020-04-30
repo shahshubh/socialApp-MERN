@@ -5,6 +5,7 @@ const morgan = require('morgan');
 const dotenv = require('dotenv');
 dotenv.config();
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
 
 const PORT = process.env.PORT || 3000;
@@ -27,6 +28,7 @@ const authRoutes = require('./routes/auth');
 
 app.use(morgan('dev'));
 app.use(bodyParser.json());
+app.use(cookieParser());
 app.use(expressValidator());
 
 
