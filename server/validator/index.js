@@ -11,13 +11,34 @@ exports.createPostValidator = (req,res,next) => {
         min: 4,
         max: 2000
     });
-
     const errors = req.validationErrors();
     if(errors){
         const firstError = errors.map((error) => error.msg)[0];
         return res.status(400).json({error: firstError});
     }
-
     next();
-
 };
+
+
+exports.userSignupValidator = (req,res,next) => {
+    req.check('name',"Please enter a name").notEmpty();
+
+
+    req.check('email',"Please enter an valid email").isEmail();
+
+    //password
+    req.check('password',"Please enter a Password").notEmpty();
+    req.check('password')
+    .isLength({ min: 6 })
+    .withMessage("Password must contain atleast 6 characters")
+    .matches(/\d/) //regex for number
+    .withMessage("Password must contain a number")
+
+    //error
+    const errors = req.validationErrors();
+    if(errors){
+        const firstError = errors.map((error) => error.msg)[0];
+        return res.status(400).json({error: firstError});
+    }
+    next();
+}
