@@ -4,9 +4,9 @@
 .loader h1{
 	font-family: 'Actor', sans-serif;
 	color:black;
-	font-size:16px;
+	font-size:24px;
 	letter-spacing:1px;
-	font-weight:200;
+	font-weight: bolder;
 	text-align:center;
 }
 .loader span{
@@ -46,34 +46,52 @@
 
 
 @keyframes kanan {
-    0% {-webkit-transform:translateX(20px);
+    0% {
+		transform: translateX(30px);
+		-webkit-transform:translateX(30px);
     }
-   
-	50%{-webkit-transform:translateX(-20px);
+	50%{
+		transform: translateX(-30px);
+		-webkit-transform:translateX(-30px);
 	}
 	
-	100%{-webkit-transform:translateX(20px);
+	100%{
+		transform: translateX(30px);
+
+		-webkit-transform:translateX(30px);
 	z-index:200;
 	}
 }
 @keyframes kanan {
-    0% {-moz-transform:translateX(20px);
+    0% {
+		transform: translateX(30px);
+		-moz-transform:translateX(30px);
     }
    
-	50%{-moz-transform:translateX(-20px);
+	50%{
+		transform: translateX(-30px);
+		-moz-transform:translateX(-30px);
 	}
 	
-	100%{-moz-transform:translateX(20px);
+	100%{
+		transform: translateX(30px);
+		-moz-transform:translateX(30px);
 	z-index:200;
 	}
 }
 @keyframes kanan {
-    0% {-o-transform:translateX(20px);
+    0% {
+		transform: translateX(30px);
+		-o-transform:translateX(30px);
     }
-	50%{-o-transform:translateX(-20px);
+	50%{
+		transform: translateX(-30px);
+		-o-transform:translateX(-30px);
 	}
-	100%{-o-transform:translateX(20px);
-	z-index:200;
+	100%{
+		transform: translateX(30px);
+		-o-transform:translateX(30px);
+		z-index:200;
 	}
 }
 
@@ -81,30 +99,48 @@
 
 
 @keyframes kiri {
-    0% {-webkit-transform:translateX(-20px);
+    0% {
+		transform: translateX(-30px);
+		-webkit-transform:translateX(-30px);
 	z-index:200;
     }
-	50%{-webkit-transform:translateX(20px);
+	50%{
+		transform: translateX(30px);
+		-webkit-transform:translateX(30px);
 	}
-	100%{-webkit-transform:translateX(-20px);
+	100%{
+		transform: translateX(-30px);
+		-webkit-transform:translateX(-30px);
 	}
 }
 
-@-moz-keyframes kiri {
-     0% {-moz-transform:translateX(-20px);
+@keyframes kiri {
+    0% {
+		transform: translateX(-30px);
+		-moz-transform:translateX(-30px);
 	z-index:200;
     }
-	50%{-moz-transform:translateX(20px);
+	50%{
+		transform: translateX(30px);
+		-moz-transform:translateX(30px);
 	}
-	100%{-moz-transform:translateX(-20px);
+	100%{
+		transform: translateX(-30px);
+		-moz-transform:translateX(-30px);
 	}
 }
-@-o-keyframes kiri {
-     0% {-o-transform:translateX(-20px);
+@keyframes kiri {
+     0% {
+		transform: translateX(-30px);
+		-o-transform:translateX(-30px);
 	z-index:200;
     }
-	50%{-o-transform:translateX(20px);
+	50%{
+		transform: translateX(30px);
+		-o-transform:translateX(30px);
 	}
-	100%{-o-transform:translateX(-20px);
+	100%{
+		transform: translateX(-30px);
+		-o-transform:translateX(-30px);
 	}
 }

@@ -10,7 +10,7 @@ class Signin extends Component {
             password: "",
             error: "",
             redirectToReferer: false,
-            loading: false
+            loading: true
         }
     }
 
