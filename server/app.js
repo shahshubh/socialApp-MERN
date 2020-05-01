@@ -2,13 +2,16 @@ const express = require('express');
 const app = express();
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const dotenv = require('dotenv');
-dotenv.config();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const expressValidator = require('express-validator');
+const cors = require('cors');
 
-const PORT = process.env.PORT || 3000;
+
+const dotenv = require('dotenv');
+dotenv.config();
+
+const PORT = process.env.PORT || 8080;  
 
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
@@ -31,6 +34,7 @@ app.use(morgan('dev'));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(expressValidator());
+app.use(cors());
 
 
 app.use('/', postRoutes);
