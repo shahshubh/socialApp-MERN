@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 
-import { signin, authenticate } from "../auth/Index";
+import { signin, authenticate } from "../auth";
 
 import './loading.css';
 
