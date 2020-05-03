@@ -43,6 +43,7 @@ class Profile extends Component {
         if(redirectToSignin){
             return <Redirect to='/signin' />
         }
+        const photoUrl = user._id ? `${process.env.REACT_APP_API_URL}/user/photo/${user._id}?${new Date().getTime()}` : DefaultProfile ;
 
         return(
             <div className="container">
@@ -50,14 +51,16 @@ class Profile extends Component {
                 <div className="row">
                     <div className="col-md-6">
                         <img 
-                            className="card-img-top" 
-                            src={DefaultProfile} 
+                            style={{ height: "200px", width: "auto" }} 
+                            className="img-thumbnail" 
+                            src={photoUrl} 
+                            onError={i => (i.target.src = DefaultProfile)}
                             alt={user.name} 
-                            style={{width: '100%', height: '15vw', objectFit: 'cover'}}
                         />
+                        <p className="lead mt-5 mb-5">{user.about}</p>
                     </div>
                     <div className="col-md-6">
-                    <div className="lead mt-2">
+                        <div className="lead mt-2">
                             <p>Hello { user.name }</p>
                             <p>Email: { user.email }</p>
                             <p>{`Joined ${new Date(user.created).toDateString()} `}</p>

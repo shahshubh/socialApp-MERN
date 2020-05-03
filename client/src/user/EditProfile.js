@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 
-import { read, update } from "./apiUser";
+import { read, update, updateUser } from "./apiUser";
 import { isAuthenticated } from "../auth";
 import './loading.css';
 import { Redirect } from 'react-router-dom';
 
+import DefaultProfile from '../images/avatar.jpg';
 
 
 class EditProfle extends Component {
@@ -15,10 +16,12 @@ class EditProfle extends Component {
             id: "",
             name: "",
             email: "",
+            about: "",
             password: "",
             loading: false,
             redirectToProfile: false,
-            error: ""
+            error: "",
+            fileSize: 0
         }
     }
 
@@ -29,18 +32,30 @@ class EditProfle extends Component {
                 if (data.error) {
                     this.setState({ redirectToProfile: true })
                 } else {
-                    this.setState({ id: data._id, name: data.name, email: data.email, error: "" });
+                    this.setState({ 
+                        id: data._id,
+                        name: data.name,
+                        email: data.email,
+                        error: "" ,
+                        about: data.about
+                    });
                 }
             })
     }
 
     componentDidMount() {
+        this.userData = new FormData()
         const userId = this.props.match.params.userId;
         this.init(userId);
     }
 
     isValid = () => {
-        const { name, email, password } = this.state;
+        const { name, email, password, fileSize } = this.state;
+        if (fileSize > 200000) {
+            this.setState({ error: "File size should be less than 200 KB", loading: false });
+            return false;
+        }
+
         if (name.length === 0) {
             this.setState({ error: "Name is required", loading: false });
             return false;
@@ -58,9 +73,14 @@ class EditProfle extends Component {
     }
 
     handleChange = e => {
+        const value = e.target.name === 'photo' ? e.target.files[0] : e.target.value;
+        const fileSize = e.target.name === 'photo' ? e.target.files[0].size : 0;
+
+        this.userData.set(e.target.name, value);
         this.setState({
             error: "",
-            [e.target.name]: e.target.value
+            [e.target.name]: value,
+            fileSize
         });
     };
 
@@ -68,27 +88,39 @@ class EditProfle extends Component {
         e.preventDefault();
         this.setState({ loading: true })
         if (this.isValid()) {
-            const { name, email, password } = this.state;
-            const user = { name, email, password: password || undefined };
+            //const { name, email, password } = this.state;
+            //const user = { name, email, password: password || undefined };
             // console.log(user);
             const userId = this.props.match.params.userId;
             const token = isAuthenticated().token;
-            update(userId, token, user)
+            update(userId, token, this.userData)
                 .then(data => {
                     if (data.error) {
                         this.setState({ error: data.error, loading: false });
                     } else {
-                        this.setState({
-                            redirectToProfile: true
-                        });
+                        updateUser(data, () => {    
+                            this.setState({
+                                redirectToProfile: true
+                            });
+                        })
                     }
                 });
         }
 
     };
 
-    signupForm = (name, email, password, loading) => (
+    signupForm = (name, email, password, loading, about) => (
         <form style={{ display: loading ? "none" : "" }}>
+            <div className="form-group">
+                <label className="text-muted">Profile Photo</label>
+                <input
+                    onChange={this.handleChange}
+                    name="photo"
+                    type="file"
+                    accept="image/*"
+                    className="form-control"
+                />
+            </div>
             <div className="form-group">
                 <label className="text-muted">Name</label>
                 <input
@@ -110,6 +142,16 @@ class EditProfle extends Component {
                 />
             </div>
             <div className="form-group">
+                <label className="text-muted">About</label>
+                <textarea
+                    onChange={this.handleChange}
+                    type="text"
+                    name="about"
+                    className="form-control"
+                    value={about}
+                />
+            </div>
+            <div className="form-group">
                 <label className="text-muted">Password</label>
                 <input
                     onChange={this.handleChange}
@@ -119,16 +161,18 @@ class EditProfle extends Component {
                     value={password}
                 />
             </div>
+            
             <button onClick={this.clickSubmit} className="btn btn-raised btn-primary">Update</button>
         </form>
     );
 
     render() {
 
-        const { id, name, email, password, loading, redirectToProfile, error } = this.state;
+        const { id, name, email, password, loading, redirectToProfile, error, about } = this.state;
         if (redirectToProfile) {
             return <Redirect to={`/user/${id}`}></Redirect>
         }
+        const photoUrl = id ? `${process.env.REACT_APP_API_URL}/user/photo/${id}?${new Date().getTime()}` : DefaultProfile ;
 
         return (
             <div className="container">
@@ -136,7 +180,14 @@ class EditProfle extends Component {
                 <div className="alert alert-danger" style={{ display: error ? "" : "none" }}>
                     {error}
                 </div>
-                {this.signupForm(name, email, password, loading)}
+                <img 
+                    style={{ display: loading ? "none" : "" , height: "200px", width: "auto" }} 
+                    className="img-thumbnail" 
+                    src={photoUrl} 
+                    onError={i => (i.target.src = DefaultProfile)}
+                    alt={name} 
+                />
+                {this.signupForm(name, email, password, loading, about)}
                 {loading ? (
                     <div className="loader">
                         <h1>LOADING</h1>

@@ -28,7 +28,7 @@ exports.getPosts = (req,res) => {
     .catch(err => console.log(err));
 };
 
-exports.createPosts = (req, res, next) => {
+exports.createPost = (req, res, next) => {
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
     form.parse(req, (err, fields, files) => {
