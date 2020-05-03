@@ -33,6 +33,28 @@ const Menu = (props) => (
             )}
             {isAuthenticated() && (
                 <>
+                
+
+                    <li className="nav-item">
+                        <Link
+                            className="nav-link"
+                            to={'/findpeople'}
+                            style={isActive(props.history, '/findpeople')}
+                        >
+                            Find People
+                        </Link>
+                    </li> 
+
+                    <li className="nav-item">
+                        <Link
+                            className="nav-link"
+                            to={`/user/${isAuthenticated().user._id}`}
+                            style={isActive(props.history, `/user/${isAuthenticated().user._id}`)}
+                        >
+                            {`${isAuthenticated().user.name}'s profile`}
+                        </Link>
+                    </li> 
+
                     <li className="nav-item">
                         <span
                             className="nav-link"
@@ -45,15 +67,6 @@ const Menu = (props) => (
                             Sign Out
                         </span>
                     </li>
-                    <li className="nav-item">
-                        <Link
-                            className="nav-link"
-                            to={`/user/${isAuthenticated().user._id}`}
-                            style={isActive(props.history, `/user/${isAuthenticated().user._id}`)}
-                        >
-                            {`${isAuthenticated().user.name}'s profile`}
-                        </Link>
-                    </li> 
                 </>
             )}
         </ul>

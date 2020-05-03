@@ -6,12 +6,14 @@ import { read } from "./apiUser";
 import DefaultProfile from '../images/avatar.jpg';
 import DeleteUser from './DeleteUser';
 import FollowProfileButton from './FollowProfileButton';
+import ProfileTabs from './ProfileTabs';
 
 
 class Profile extends Component {
     constructor(){
         super();
         this.state = {
+            // user: "",
             user: { following: [], followers: [] },
             redirectToSignin: false,
             following: false,
@@ -68,6 +70,7 @@ class Profile extends Component {
 
     render(){
         const { redirectToSignin, user, following } = this.state;
+        console.log("state user", user);
         if(redirectToSignin){
             return <Redirect to='/signin' />
         }
@@ -106,6 +109,11 @@ class Profile extends Component {
                         ): (
                             <FollowProfileButton following={following} onButtonClick={this.clickFollowButton} />
                         )}
+                    </div>
+                </div>
+                <div className="row">
+                    <div className="col-md-12 mt-5 mb-5">
+                        <ProfileTabs followers={user.followers} following={user.following} />
                     </div>
                 </div>
             </div>
