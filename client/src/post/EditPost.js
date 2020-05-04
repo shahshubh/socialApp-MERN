@@ -15,6 +15,7 @@ class EditProfle extends Component {
             title: '',
             body: '',
             photo: '',
+            postedBy: '',
             redirectToProfile: false,
             error: '',
             loading: false,
@@ -33,6 +34,7 @@ class EditProfle extends Component {
                         title: data.title,
                         body: data.body,
                         photo: data.photo,
+                        postedBy: data.postedBy._id,
                         error: ""
                     });
                 }
@@ -46,7 +48,12 @@ class EditProfle extends Component {
     }
 
     isValid = () => {
-        const { title, body, fileSize, photo } = this.state;
+        const { title, body, fileSize, photo, postedBy } = this.state;
+        if(postedBy !== isAuthenticated().user._id){
+            this.setState({ error: "You are not authorized to do this !!", loading: false });
+            return false;
+        }
+
         if (fileSize > 200000) {
             this.setState({ error: "File size should be less than 200 KB", loading: false });
             return false;

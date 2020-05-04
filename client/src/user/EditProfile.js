@@ -51,6 +51,12 @@ class EditProfle extends Component {
 
     isValid = () => {
         const { name, email, password, fileSize } = this.state;
+        const userId = this.props.match.params.userId;
+        if(userId !== isAuthenticated().user._id){
+            this.setState({ error: "You are not authorized to do this !!", loading: false });
+            return false;
+        }
+
         if (fileSize > 200000) {
             this.setState({ error: "File size should be less than 200 KB", loading: false });
             return false;
@@ -74,11 +80,7 @@ class EditProfle extends Component {
 
     handleChange = e => {
         const value = e.target.name === 'photo' ? e.target.files[0] : e.target.value;
-        let fileSize;
-        if(e.target.files[0]){
-            fileSize = e.target.name === 'photo' ? e.target.files[0].size : 0;
-        }
-
+        const fileSize = e.target.name === 'photo' ? e.target.files[0].size : 0;
         this.userData.set(e.target.name, value);
         this.setState({
             error: "",
@@ -173,7 +175,7 @@ class EditProfle extends Component {
 
         const { id, name, email, password, loading, redirectToProfile, error, about } = this.state;
         if (redirectToProfile) {
-            return <Redirect to={`/user/${id}`}></Redirect>
+            return <Redirect to={`/user/${isAuthenticated().user._id}`}></Redirect>
         }
         const photoUrl = id ? `${process.env.REACT_APP_API_URL}/user/photo/${id}?${new Date().getTime()}` : DefaultProfile ;
 
