@@ -74,7 +74,10 @@ class EditProfle extends Component {
 
     handleChange = e => {
         const value = e.target.name === 'photo' ? e.target.files[0] : e.target.value;
-        const fileSize = e.target.name === 'photo' ? e.target.files[0].size : 0;
+        let fileSize;
+        if(e.target.files[0]){
+            fileSize = e.target.name === 'photo' ? e.target.files[0].size : 0;
+        }
 
         this.userData.set(e.target.name, value);
         this.setState({

@@ -1,31 +1,48 @@
 import React, { Component } from 'react';
 
-import { create } from "./apiPost";
-import { isAuthenticated } from "../auth";
 import Loading from '../loading/Loading';
+import { singlePost, update } from './apiPost';
+import { isAuthenticated } from "../auth";
 import { Redirect } from 'react-router-dom';
 
 
-
-class NewPost extends Component {
+class EditProfle extends Component {
 
     constructor() {
         super();
         this.state = {
-            title: "",
-            body: "",
-            photo: "",
-            error: "",
-            user: {},
-            fileSize: 0,
+            id: '',
+            title: '',
+            body: '',
+            photo: '',
+            redirectToProfile: false,
+            error: '',
             loading: false,
-            redirectToProfile: false
-        };
+            fileSize: 0
+        }
+    }
+
+    init = (postId) => {
+        singlePost(postId)
+            .then(data => {
+                if (data.error) {
+                    this.setState({ redirectToProfile: true })
+                } else {
+                    this.setState({ 
+                        id: data._id,
+                        title: data.title,
+                        body: data.body,
+                        photo: data.photo,
+                        error: ""
+                    });
+                }
+            })
     }
 
     componentDidMount() {
-        this.postData = new FormData();
-        this.setState({user: isAuthenticated().user});
+        this.postData = new FormData()
+        const postId = this.props.match.params.postId;
+        this.init(postId);
     }
 
     isValid = () => {
@@ -65,9 +82,9 @@ class NewPost extends Component {
         e.preventDefault();
         this.setState({ loading: true })
         if (this.isValid()) {
-            const userId = isAuthenticated().user._id;
+            const postId = this.state.id;
             const token = isAuthenticated().token;
-            create(userId, token, this.postData)
+            update(postId, token, this.postData)
                 .then(data => {
                     if (data.error) {
                         this.setState({ error: data.error, loading: false });
@@ -85,7 +102,7 @@ class NewPost extends Component {
         }
     };
 
-    newPostForm = (title, body) => (
+    editPostForm = (title, body) => (
         <form>
             <div className="form-group">
                 <label className="text-muted">Photo</label>
@@ -118,31 +135,37 @@ class NewPost extends Component {
                 />
             </div>
 
-            <button onClick={this.clickSubmit} className="btn btn-raised btn-primary">Create Post</button>
+            <button onClick={this.clickSubmit} className="btn btn-raised btn-primary">Update Post</button>
         </form>
     );
 
-    render() {
-
-        const { title, body, user, loading, error, redirectToProfile } = this.state;
+    render(){
+        const { id, title, body, loading, redirectToProfile, error } = this.state;
         if (redirectToProfile) {
-            return <Redirect to={`/user/${user._id}`}></Redirect>
+            return <Redirect to={`/user/${isAuthenticated().user._id}`}></Redirect>
         }
+        const photoUrl = `${process.env.REACT_APP_API_URL}/post/photo/${id}?${new Date().getTime()}`;
 
-        return (
-            <div className="container">
-                <h2 className="mt-5 mb-5">Create a new post</h2>
+        return(
+            <div className="container"> 
+                <h2 className="mt-5 mb-5">Edit Post - {title}</h2>
                 <div className="alert alert-danger" style={{ display: error ? "" : "none" }}>
                     {error}
                 </div>
+                <img 
+                    style={{ display: loading ? "none" : "" , height: "200px", width: "auto" }} 
+                    className="img-thumbnail" 
+                    src={photoUrl} 
+                    alt={title} 
+                />
                 {loading ? (
                     <Loading />
                 ) : (
-                    this.newPostForm(title, body)
+                    this.editPostForm(title, body)
                 )}
             </div>
-        );
+        )
     }
 }
 
-export default NewPost;
+export default EditProfle;
