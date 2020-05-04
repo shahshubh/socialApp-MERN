@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 
 import { signup } from "../auth";
 
-import './loading.css';
 import { Link } from 'react-router-dom';
+import Loading from '../loading/Loading';
 
 class Signup extends Component {
     constructor(){
@@ -100,12 +100,7 @@ class Signup extends Component {
                 </div>
                 {this.signupForm(name, email, password, loading)}
                 { loading ? (
-                    <div className="loader">
-                        <h1>LOADING</h1>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
+                    <Loading />
                 ) : (
                     ""
                 )}

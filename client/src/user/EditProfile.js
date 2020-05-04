@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 
+import Loading from '../loading/Loading';
+
 import { read, update, updateUser } from "./apiUser";
 import { isAuthenticated } from "../auth";
-import './loading.css';
 import { Redirect } from 'react-router-dom';
-
 import DefaultProfile from '../images/avatar.jpg';
 
 
@@ -110,7 +110,7 @@ class EditProfle extends Component {
     };
 
     signupForm = (name, email, password, loading, about) => (
-        <form style={{ display: loading ? "none" : "" }}>
+        <form>
             <div className="form-group">
                 <label className="text-muted">Profile Photo</label>
                 <input
@@ -187,17 +187,11 @@ class EditProfle extends Component {
                     onError={i => (i.target.src = DefaultProfile)}
                     alt={name} 
                 />
-                {this.signupForm(name, email, password, loading, about)}
                 {loading ? (
-                    <div className="loader">
-                        <h1>LOADING</h1>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
+                    <Loading />
                 ) : (
-                        ""
-                    )}
+                    this.signupForm(name, email, password, loading, about)
+                )}
             </div>
         );
     }

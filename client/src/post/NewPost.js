@@ -2,10 +2,9 @@ import React, { Component } from 'react';
 
 import { create } from "./apiPost";
 import { isAuthenticated } from "../auth";
-import '../user/loading.css';
+import Loading from '../loading/Loading';
 import { Redirect } from 'react-router-dom';
 
-import DefaultProfile from '../images/avatar.jpg';
 
 
 class NewPost extends Component {
@@ -125,7 +124,7 @@ class NewPost extends Component {
 
     render() {
 
-        const { title, body, photo, user, loading, error, redirectToProfile } = this.state;
+        const { title, body, user, loading, error, redirectToProfile } = this.state;
         if (redirectToProfile) {
             return <Redirect to={`/user/${user._id}`}></Redirect>
         }
@@ -136,14 +135,9 @@ class NewPost extends Component {
                 <div className="alert alert-danger" style={{ display: error ? "" : "none" }}>
                     {error}
                 </div>
-                {this. newPostForm(title, body, loading)}
+                {this.newPostForm(title, body, loading)}
                 {loading ? (
-                    <div className="loader">
-                        <h1>LOADING</h1>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
+                    <Loading />
                 ) : (
                         ""
                     )}

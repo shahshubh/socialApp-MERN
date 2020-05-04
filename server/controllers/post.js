@@ -116,3 +116,7 @@ exports.photo = (req, res, next) => {
     return res.send(req.post.photo.data);
     next();
 };
+
+exports.singlePost = (req,res) => {
+    return res.json(req.post);
+}

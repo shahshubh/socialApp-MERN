@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 
 import { list } from './apiPost';
-import DefaultProfile from '../images/avatar.jpg';
 import { Link } from 'react-router-dom';
+import Loading from '../loading/Loading';
+
 
 class Posts extends Component {
     constructor() {
@@ -45,7 +46,7 @@ class Posts extends Component {
                                     Posted by <Link to={`/user/${posterId}`}>{posterName}</Link>{" "} on {new Date(post.created).toDateString()}
                                 </p>
                                 <Link
-                                    to={`/posts/${post._id}`}
+                                    to={`/post/${post._id}`}
                                     className="btn btn-raised btn-sm btn-primary">
                                     Read More
                                 </Link>
@@ -62,7 +63,11 @@ class Posts extends Component {
         return(
             <div className="container">
                 <h2 className="mt-5 mb-5">Posts</h2>
-                {this.renderPosts(posts)}
+                {!posts.length ? (
+                    <Loading />
+                ) : (
+                    this.renderPosts(posts)
+                )}
             </div>
         );
     }
