@@ -48,12 +48,24 @@ const Menu = (props) => (
                     <li className="nav-item">
                         <Link
                             className="nav-link"
+                            to={'/post/create'}
+                            style={isActive(props.history, '/post/create')}
+                        >
+                            Create Post
+                        </Link>
+                    </li> 
+
+                    <li className="nav-item">
+                        <Link
+                            className="nav-link"
                             to={`/user/${isAuthenticated().user._id}`}
                             style={isActive(props.history, `/user/${isAuthenticated().user._id}`)}
                         >
                             {`${isAuthenticated().user.name}'s profile`}
                         </Link>
-                    </li> 
+                    </li>
+
+                    
 
                     <li className="nav-item">
                         <span
