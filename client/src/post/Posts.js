@@ -35,7 +35,7 @@ class Posts extends Component {
                             <div className="card-body">
                                 <img 
                                     className="img-thumbnail mb-3"
-                                    style={{ height: "200px", width: "auto" }} 
+                                    style={{ height: "200px", width: "100%" }} 
                                     src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
                                     alt={post.title}
                                 />
