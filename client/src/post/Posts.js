@@ -32,6 +32,12 @@ class Posts extends Component {
                     return (
                         <div key={i} className="card col-md-4" >
                             <div className="card-body">
+                                <img 
+                                    className="img-thumbnail mb-3"
+                                    style={{ height: "200px", width: "auto" }} 
+                                    src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
+                                    alt={post.title}
+                                />
                                 <h5 className="card-title">{post.title}</h5>
                                 <p className="card-text">{post.body.substring(0,100)}</p>
                                 <br />
