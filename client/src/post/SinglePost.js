@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { singlePost, remove } from './apiPost';
+import { singlePost, remove, like, unlike } from './apiPost';
 import { Link, Redirect } from 'react-router-dom';
 import Loading from '../loading/Loading';
 import { isAuthenticated } from "../auth";
@@ -12,9 +12,18 @@ class SinglePost extends Component {
         super();
         this.state = {
             post: '',
-            redirectToHome: false
+            redirectToHome: false,
+            redirectToSignin: false,
+            like: false,
+            likes: 0
         }
     }
+
+    checkLike = (likes) => {
+        const  userId = isAuthenticated() && isAuthenticated().user._id;
+        let match = likes.indexOf(userId) !== -1; //true if user found
+        return match;
+    };
 
     componentDidMount() {
         const postId = this.props.match.params.postId;
@@ -23,10 +32,32 @@ class SinglePost extends Component {
                 if (data.error) {
                     console.log(data.error)
                 } else {
-                    this.setState({ post: data });
+                    this.setState({ post: data, likes: data.likes.length, like: this.checkLike(data.likes) });
                     console.log(data);
                 }
             });
+    };
+
+    likeToggle = () => {
+        if(!isAuthenticated()){
+            this.setState({ redirectToSignin: true })
+            return false; //so that rest of code isn't executed
+        }
+        let callApi = this.state.like ? unlike : like;
+        const userId = isAuthenticated().user._id;
+        const postId = this.state.post._id;
+        const token = isAuthenticated().token;
+        callApi(userId, token, postId)
+        .then(data => {
+            if(data.error){
+                console.log(data.error)
+            } else {
+                this.setState({
+                    like: !this.state.like,
+                    likes: data.likes.length
+                });
+            }
+        });
     };
 
     deletePost = () => {
@@ -53,8 +84,13 @@ class SinglePost extends Component {
     renderPost = (post) => {
         const posterId = post.postedBy ? post.postedBy._id : "";
         const posterName = post.postedBy ? post.postedBy.name : " Unknown";
-        if(this.state.redirectToHome){
+
+        const { like, likes, redirectToSignin, redirectToHome } = this.state;
+
+        if(redirectToHome){
             return <Redirect to='/'></Redirect>
+        } else if(redirectToSignin){
+            return <Redirect to='/signin'></Redirect>
         }
 
         return (
@@ -65,6 +101,13 @@ class SinglePost extends Component {
                     src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
                     alt={post.title}
                 />
+                
+                {like ? (
+                    <h3 onClick={this.likeToggle}><i className="fa fa-heart" style={{color: "red", padding: "10px"}} aria-hidden="true"></i>{likes} Likes</h3>
+                ) : (
+                    <h3 onClick={this.likeToggle}><i className="fa fa-heart-o" style={{padding: "10px"}} aria-hidden="true"></i>{likes} Likes</h3>
+                )}
+
                 <p className="card-text">{post.body}</p>
                 <br />
                 <p className="font-italic mark">
