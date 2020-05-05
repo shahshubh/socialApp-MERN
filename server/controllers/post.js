@@ -7,8 +7,9 @@ const Post = require('../models/post');
 exports.postById = (req, res, next, id) => {
     Post.findById(id)
     .populate("postedBy", "_id name")
-    .populate('comments','text created')
-    .populate('comments.postedBy','_id name')
+    .populate('comments.postedBy', '_id name')
+    .populate('postedBy', '_id name')
+    .select('_id title body created likes comments photo')
     .exec((err, post) => {
         if(err || !post){
             return res.status(400).json({
@@ -191,7 +192,7 @@ exports.comment = (req, res) => {
     comment.postedBy = req.body.userId
     Post.findByIdAndUpdate(req.body.postId, { $push: {comments: comment} }, {new: true})
     .populate('comments.postedBy','_id name')
-    //.populate('postedBy', '_id name)
+    .populate('postedBy', '_id name')
     .exec((err, result) => {
         if(err){
             return res.status(400).json({
@@ -209,7 +210,7 @@ exports.uncomment = (req, res) => {
     let comment = req.body.comment;
     Post.findByIdAndUpdate(req.body.postId, { $pull: {comments: {_id: comment._id}} }, {new: true})
     .populate('comments.postedBy','_id name')
-    //.populate('postedBy', '_id name)
+    .populate('postedBy', '_id name')
     .exec((err, result) => {
         if(err){
             return res.status(400).json({
