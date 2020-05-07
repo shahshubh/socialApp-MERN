@@ -127,7 +127,15 @@ class Profile extends Component {
                                 <DeleteUser userId={user._id} />
                             </div>
                         ): (
-                            <FollowProfileButton following={following} onButtonClick={this.clickFollowButton} />
+                            <>
+                                <Link 
+                                    className="btn btn-raised btn-success mr-5"
+                                    to={`/chat/${isAuthenticated().user._id}/${user._id}`}
+                                >
+                                    Message
+                                </Link>
+                                <FollowProfileButton following={following} onButtonClick={this.clickFollowButton} />
+                            </>
                         )}
                     </div>
                 </div>

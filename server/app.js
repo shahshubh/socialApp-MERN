@@ -1,5 +1,11 @@
 const express = require('express');
+const http = require("http");
+const socketio = require("socket.io");
 const app = express();
+
+const server =http.createServer(app);
+const io = socketio(server);
+
 const mongoose = require('mongoose');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
@@ -29,6 +35,7 @@ mongoose.connection.on('error', err => {
 const postRoutes = require('./routes/post');
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/user');
+const chatRoutes = require('./routes/chat');
 
 
 app.get('/api', (req, res) => {
@@ -50,10 +57,86 @@ app.use(cookieParser());
 app.use(expressValidator());
 app.use(cors());
 
+const Socket = require('./models/socket');
+const Chat = require('./models/chat');
+
+io.on('connection', (socket) => {
+    socket.on('userInfo',(user) => {
+        console.log("===============================");
+        console.log("USer OUTER", user);
+        console.log("===============================");
+        Socket.findOne({email: user.email}, function(err,res) {
+            if(!res){
+                let newSocket = new Socket({
+                    socketId: socket.id,
+                    user: user,
+                    email: user.email
+                })
+                newSocket.save((err,result) => {
+                    if(err){
+                        console.log(err)
+                    } else {
+                        console.log("ADDED TO DB ", socket.id)
+                    }
+                })
+            } else {
+                console.log("ALREADY THERE ",res.user.email)
+                Socket.findOneAndUpdate({email: user.email} ,{$set: {"socketId": socket.id}}, (err,result) => {
+                    if(err){
+                        console.log(err)
+                    }else{
+                        console.log("UPDATED");
+                    }
+                })
+            }   
+        })
+    })
+    socket.on('sendMessage', (message, sender, reciever, socketId, callback) => {
+        Socket.findOne({email: reciever.email})
+        .exec(function(err,res) {
+            if(res!=null){
+                console.log("SENT")
+                //console.log(res.socketId)
+                io.to(res.socketId).emit('message', message);
+                socket.emit('message', message);
+                let newChat = new Chat({
+                    message,
+                    reciever,
+                    sender
+                });
+                newChat.save((err,result) => {
+                    if(err){
+                        console.log(err)
+                    } else {
+                        console.log("--------------------------------");
+                        console.log("CHAT SAVED");
+                        console.log("--------------------------------");
+                    }
+                })
+            }   
+        })
+        //io.emit('message', message);
+        callback();
+    });
+
+    socket.on('disconnect', () => {
+        Socket.findOne({socketId: socket.id})
+        .remove((err, result) => {
+            if(err){
+                console.log(err)
+            } else {
+                console.log("DELETED");
+            }
+        })
+        console.log("DISCONNECTED")
+    })
+})
 
 app.use('/', postRoutes);
 app.use('/', authRoutes);
 app.use('/', userRoutes);
+app.use('/', chatRoutes);
+
 
 
 app.use(function(err,req,res,next){
@@ -64,6 +147,6 @@ app.use(function(err,req,res,next){
 
 
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.log(`Server started at port ${PORT}`)
 })
