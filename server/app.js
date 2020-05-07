@@ -113,7 +113,25 @@ io.on('connection', (socket) => {
                         console.log("--------------------------------");
                     }
                 })
-            }   
+            } else {
+                socket.emit('message', message);
+                console.log("OFFLINE")
+                let newChat = new Chat({
+                    message,
+                    reciever,
+                    sender
+                });
+                newChat.save((err,result) => {
+                    if(err){
+                        console.log(err)
+                    } else {
+                        console.log("--------------------------------");
+                        console.log("CHAT SAVED");
+                        console.log("--------------------------------");
+                    }
+                })
+
+            }
         })
         //io.emit('message', message);
         callback();
