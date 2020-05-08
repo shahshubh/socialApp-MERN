@@ -13,15 +13,15 @@ class FollowProfileButton extends Component{
 
     render(){
         return(
-            <div className="d-inline-block mt-5">
+            <>
                 { !this.props.following ? 
                     (
                         <button onClick={this.followClick} className="btn btn-success btn-raised">Follow</button>
                     ) : (
-                        <button onClick={this.unfollowClick} className="btn btn-warning btn-raised ml-5">UnFollow</button>
+                        <button onClick={this.unfollowClick} className="btn btn-sm btn-danger pull-right">UnFollow</button>
                     )
                 } 
-            </div>
+            </>
         );
     }
 }

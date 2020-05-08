@@ -142,17 +142,8 @@ exports.addFollower = (req, res) => {
 };
 
 
-exports.removeFollowing = (req, res, next) => {
-    User.findByIdAndUpdate(req.body.userId, {$pull: { following: req.body.unfollowId }}, (err, result) => {
-        if(err){
-            return res.status(400).json({error: err});
-        }
-        next();
-    });
-};
-
-exports.removeFollower = (req, res) => {
-    User.findByIdAndUpdate(req.body.unfollowId, {$pull: { followers: req.body.userId }}, {new: true})
+exports.removeFollowing = (req, res) => {
+    User.findByIdAndUpdate(req.body.userId, {$pull: { following: req.body.unfollowId }}, {new: true})
     .populate('following', '_id name')
     .populate('followers', '_id name')
     .exec((err, result) => {
@@ -163,6 +154,17 @@ exports.removeFollower = (req, res) => {
         result.salt = undefined;
         res.json(result);
     });
+    
+};
+
+exports.removeFollower = (req, res, next) => {
+    User.findByIdAndUpdate(req.body.unfollowId, {$pull: { followers: req.body.userId }}, (err, result) => {
+        if(err){
+            return res.status(400).json({error: err});
+        }
+        next();
+    });
+    
 };
 
 
