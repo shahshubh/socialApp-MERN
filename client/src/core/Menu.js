@@ -13,7 +13,12 @@ const isActive = (history, path) => {
 
 const Menu = (props) => (
     <div>
-        <ul className="nav nav-tabs bg-primary">
+        <ul 
+            className="nav nav-tabs bg-primary mb-5" 
+            style={{ 
+                background: "#007991", 
+                background: "-webkit-linear-gradient(to right, #007991, #78ffd6)",
+                background: "linear-gradient(to right, #007991, #78ffd6)"}}>
             <li className="nav-item">
                 <Link className="nav-link" style={isActive(props.history, "/")} to='/' >Home</Link>
             </li>

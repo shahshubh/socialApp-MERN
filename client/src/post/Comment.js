@@ -4,6 +4,8 @@ import { isAuthenticated } from '../auth';
 import { Link } from 'react-router-dom';
 import DefaultProfile from '../images/avatar.jpg';
 import Picker from 'emoji-picker-react';
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 class Comment extends Component {
     constructor() {
@@ -83,10 +85,19 @@ class Comment extends Component {
     };
 
     deleteConfirmed = (comment) => {
-        let answer = window.confirm("Are you sure you want to delete this comment?");
-        if (answer) {
-            this.deleteComment(comment);
-        }
+        confirmAlert({
+            title: 'Are you sure ?',
+            message: 'you want to delete this comment.',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => this.deleteComment(comment)
+                },
+                {
+                    label: 'No',
+                }
+            ]
+        });
     }
 
     onEmojiClick = (event, emojiObject) => {
@@ -115,14 +126,14 @@ class Comment extends Component {
                             placeholder="Leave a comment..."
                         />
                         <div>
-                            <button type="button" onClick = {() => this.setState({ showPicker: !showPicker})} className="btn btn-sm btn-raised btn-primary">Emoji</button>
+                            <button type="button" onClick={() => this.setState({ showPicker: !showPicker })} className="btn btn-sm btn-raised btn-primary">Emoji</button>
                         </div>
                         <div className="input-group-append">
                             <button type="submit" className="btn btn-raised btn-sm btn-primary">Add comment</button>
                         </div>
                     </div>
                 </form>
-                { showPicker ? <Picker onEmojiClick={this.onEmojiClick} /> : "" }
+                {showPicker ? <Picker onEmojiClick={this.onEmojiClick} /> : ""}
 
 
                 <div className="alert alert-danger" style={{ display: error ? "" : "none" }}>

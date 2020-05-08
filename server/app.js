@@ -117,7 +117,6 @@ io.on('connection', async (socket) => {
                 socket.emit('message', newChat);
 
             } else {
-                console.log("OFFLINE")
                 const newChat = new Chat({
                     message,
                     reciever,
@@ -128,7 +127,7 @@ io.on('connection', async (socket) => {
                         console.log(err)
                     } else {
                         console.log("--------------------------------");
-                        console.log("CHAT SAVED");
+                        console.log("OFFLINE CHAT SAVED");
                         console.log("--------------------------------");
                     }
                 })
