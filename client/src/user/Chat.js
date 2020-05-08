@@ -16,7 +16,9 @@ class Chat extends Component{
             message: "",
             messages: [],
             sender: {},
-            reciever: {}
+            reciever: {},
+            chatList: [],
+            loading: false
         };
     }
 
@@ -31,6 +33,7 @@ class Chat extends Component{
     };
 
     async componentWillMount(){
+        this.setState({loading: true});
         const senderId = this.props.match.params.user1Id;
         const recieverId = this.props.match.params.user2Id;
         const data = await getChats(senderId,recieverId)
@@ -38,6 +41,7 @@ class Chat extends Component{
             alert(data.error)
         } else {
             this.setState({ messages: data })
+            this.setState({loading: false});
             //console.log(data);
         }
     }
@@ -48,12 +52,15 @@ class Chat extends Component{
         const sender = await this.init(senderId);
         const reciever = await this.init(recieverId);
         this.setState({ sender,reciever });
-        
-        this.initSocket();
-        socket.on('message', (message) => {
-            console.log('pushed ',message);
-            this.getChats()
-            //this.setState({ messages: [...this.state.messages, message] });
+
+        await this.initSocket();
+        socket.on('message', async (newChat) => {
+            console.log('pushed');
+            //await this.getChats()
+            if(newChat.sender._id === recieverId || newChat.sender._id === senderId){
+                this.setState({messages: [...this.state.messages, newChat]})
+            }
+            this.setState({loading: false});
         });
     }
 
@@ -61,18 +68,17 @@ class Chat extends Component{
         const {sender} = this.state;
         socket = io(socketUrl);
         socket.on('connect', () => {
-            console.log("Client connected",sender)
             socket.emit('userInfo',sender);
-            console.log('socketId ',socket.id)
         })
         this.setState({socket});
     }
 
     sendMessage = (e) => {
-        const {message,sender,reciever,socket} = this.state;
+        this.setState({loading: true});
         e.preventDefault();
+        const {message,sender,reciever} = this.state;
         if(message){
-            socket.emit('sendMessage',message,sender,reciever, socket.id, () => {
+            socket.emit('sendMessage',message,sender,reciever, this.state.socket.id, () => {
                 console.log('sent ',message);
                 this.setState({message: ''})
             })
@@ -94,9 +100,11 @@ class Chat extends Component{
         return(
             <div>
                 <h1>Chat</h1>
+                {this.state.loading ? (<h1>Loading</h1>) : ("") }
                 {this.state.messages.map((chat,i) => (
                     <p key={i}>{chat.sender.name} - {chat.message} </p>
                 ))}
+
                 <form onSubmit={this.sendMessage}>
                     <div className="form-group mt-5">
                         <input

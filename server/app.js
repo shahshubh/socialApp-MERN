@@ -60,7 +60,7 @@ app.use(cors());
 const Socket = require('./models/socket');
 const Chat = require('./models/chat');
 
-io.on('connection', (socket) => {
+io.on('connection', async (socket) => {
     socket.on('userInfo',(user) => {
         console.log("===============================");
         console.log("USer OUTER", user);
@@ -92,19 +92,18 @@ io.on('connection', (socket) => {
         })
     })
     socket.on('sendMessage', (message, sender, reciever, socketId, callback) => {
+        const senderId = sender._id;
+        const recieverId = reciever._id;
         Socket.findOne({email: reciever.email})
-        .exec(function(err,res) {
+        .exec(async function(err,res) {
             if(res!=null){
                 console.log("SENT")
-                //console.log(res.socketId)
-                io.to(res.socketId).emit('message', message);
-                socket.emit('message', message);
-                let newChat = new Chat({
+                const newChat = new Chat({
                     message,
                     reciever,
                     sender
                 });
-                newChat.save((err,result) => {
+                await newChat.save((err,result) => {
                     if(err){
                         console.log(err)
                     } else {
@@ -113,27 +112,30 @@ io.on('connection', (socket) => {
                         console.log("--------------------------------");
                     }
                 })
-            } else {
-                socket.emit('message', message);
-                console.log("OFFLINE")
-                let newChat = new Chat({
-                    message,
-                    reciever,
-                    sender
-                });
-                newChat.save((err,result) => {
-                    if(err){
-                        console.log(err)
-                    } else {
-                        console.log("--------------------------------");
-                        console.log("CHAT SAVED");
-                        console.log("--------------------------------");
-                    }
-                })
+                // const allChats = await Chat.find({ $or: [{ 'reciever._id': recieverId, 'sender._id': senderId },{ 'sender._id': recieverId, 'reciever._id': senderId }] })
+                io.to(res.socketId).emit('message', newChat);
+                socket.emit('message', newChat);
 
+            } else {
+                console.log("OFFLINE")
+                const newChat = new Chat({
+                    message,
+                    reciever,
+                    sender
+                });
+                await newChat.save((err,result) => {
+                    if(err){
+                        console.log(err)
+                    } else {
+                        console.log("--------------------------------");
+                        console.log("CHAT SAVED");
+                        console.log("--------------------------------");
+                    }
+                })
+                // const allChats = await Chat.find({ $or: [{ 'reciever._id': recieverId, 'sender._id': senderId },{ 'sender._id': recieverId, 'reciever._id': senderId }] })
+                socket.emit('message', newChat);
             }
         })
-        //io.emit('message', message);
         callback();
     });
 
