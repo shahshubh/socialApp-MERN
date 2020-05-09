@@ -1,0 +1,15 @@
+.panel-body {
+    max-height:650px;
+    overflow:auto;
+}
+
+.media-list .media img {
+    width:40px;
+    height:40px;
+    border:2px solid #e5e7e8;
+}
+
+.media-list .media {
+    border-bottom:1px dashed #efefef;
+    margin-bottom:25px;
+}

@@ -1,5 +1,6 @@
 const Chat  = require('../models/chat');
 const User  = require('../models/user');
+const Socket  = require('../models/socket');
 
 exports.getChats = (req,res) => {
     const senderId = req.params.senderId;
@@ -29,5 +30,18 @@ exports.chatList = async (req,res) => {
             })
         }
         res.json(data);
+    });
+};
+
+exports.getOnlineUsers = (req,res) => {
+    Socket.find()
+    .select('user._id')
+    .exec((err, result) => {
+        if(err || !result){
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.json(result);
     });
 };

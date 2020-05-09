@@ -16,7 +16,7 @@ class EditProfle extends Component {
             body: '',
             photo: '',
             postedBy: '',
-            redirectToProfile: false,
+            redirectToPost: false,
             error: '',
             loading: false,
             fileSize: 0
@@ -27,7 +27,7 @@ class EditProfle extends Component {
         singlePost(postId)
             .then(data => {
                 if (data.error) {
-                    this.setState({ redirectToProfile: true })
+                    this.setState({ redirectToPost: true })
                 } else {
                     this.setState({ 
                         id: data._id,
@@ -101,9 +101,8 @@ class EditProfle extends Component {
                             body: "",
                             photo: "",
                             loading: false,
-                            redirectToProfile: true
+                            redirectToPost: true
                         });
-                        //console.log("NEW POST ",data);
                     }
                 });
         }
@@ -147,9 +146,9 @@ class EditProfle extends Component {
     );
 
     render(){
-        const { id, title, body, loading, redirectToProfile, error } = this.state;
-        if (redirectToProfile) {
-            return <Redirect to={`/user/${isAuthenticated().user._id}`}></Redirect>
+        const { id, title, body, loading, redirectToPost, error } = this.state;
+        if (redirectToPost) {
+            return <Redirect to={`/post/${id}`}></Redirect>
         }
         const photoUrl = `${process.env.REACT_APP_API_URL}/post/photo/${id}?${new Date().getTime()}`;
 

@@ -6,7 +6,6 @@ import { read } from "./apiUser";
 import DefaultProfile from '../images/avatar.jpg';
 import DeleteUser from './DeleteUser';
 import FollowProfileButton from './FollowProfileButton';
-import ProfileTabs from './ProfileTabs';
 import { listByUser } from '../post/apiPost';
 import '../css/Profile.css';
 
@@ -241,67 +240,6 @@ class Profile extends Component {
                 </div>
             </div>
         );
-
-        {/* // return(
-        //     <div classNameName="container">
-        //         <h2 classNameName="mt-5 mb-5" >Profile</h2>
-        //         <div classNameName="row">
-        //             <div classNameName="col-md-4">
-        //                 <img 
-        //                     style={{ height: "200px", width: "auto" }} 
-        //                     classNameName="img-thumbnail" 
-        //                     src={photoUrl} 
-        //                     onError={i => (i.target.src = DefaultProfile)}
-        //                     alt={user.name} 
-        //                 />
-        //                 <p classNameName="lead mt-5 mb-5">{user.about}</p>
-        //             </div>
-        //             <div classNameName="col-md-8">
-        //                 <div classNameName="lead mt-2">
-        //                     <p>Hello { user.name }</p>
-        //                     <p>Email: { user.email }</p>
-        //                     <p>{`Joined ${new Date(user.created).toDateString()} `}</p>
-        //                 </div>
-        //                 {isAuthenticated().user && isAuthenticated().user._id === user._id ? (
-        //                     <div classNameName="d-inline-block">
-        //                         <Link 
-        //                             classNameName="btn btn-raised btn-info mr-5"
-        //                             to={`/post/create`}
-        //                         >
-        //                             Create Post
-        //                         </Link>
-        //                         <Link 
-        //                             classNameName="btn btn-raised btn-success mr-5"
-        //                             to={`/user/edit/${user._id}`}
-        //                         >
-        //                             Edit Profile
-        //                         </Link>
-        //                         <DeleteUser userId={user._id} />
-        //                     </div>
-        //                 ): (
-        //                     <>
-        //                         <Link 
-        //                             classNameName="btn btn-raised btn-success mr-5"
-        //                             to={`/chat/${isAuthenticated().user._id}/${user._id}`}
-        //                         >
-        //                             Message
-        //                         </Link>
-        //                         <FollowProfileButton following={following} onButtonClick={this.clickFollowButton} />
-        //                     </>
-        //                 )}
-        //             </div>
-        //         </div>
-        //         <div classNameName="row">
-        //             <div classNameName="col-md-12 mt-5 mb-5">
-        //                 <ProfileTabs 
-        //                     followers={user.followers} 
-        //                     following={user.following} 
-        //                     posts={ posts }
-        //                 />
-        //             </div>
-        //         </div>
-        //     </div>
-        // ); */}
     }
 }
 

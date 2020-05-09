@@ -6,6 +6,9 @@ import DefaultProfile from '../images/avatar.jpg';
 import Picker from 'emoji-picker-react';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import {timeDifference} from './timeDifference';
+
+import '../css/Comment.css';
 
 class Comment extends Component {
     constructor() {
@@ -59,7 +62,8 @@ class Comment extends Component {
                         console.log(data.error)
                     } else {
                         this.setState({
-                            text: ""
+                            text: "",
+                            showPicker: false
                         });
                         // send the updated/fresh list of comments to the parent component
                         this.props.updateComments(data.comments);
@@ -113,68 +117,73 @@ class Comment extends Component {
         const { text, error, showPicker } = this.state;
         const { comments } = this.props;
 
-        return (
+        return(
             <div>
-                <h2 className="mt-5 mb-5">Leave a comment</h2>
-                <form onSubmit={this.addComment}>
-                    <div className="input-group">
-                        <input
-                            className="form-control"
-                            type="text"
-                            onChange={this.handleChange}
-                            value={text}
-                            placeholder="Leave a comment..."
-                        />
-                        <div>
-                            <button type="button" onClick={() => this.setState({ showPicker: !showPicker })} className="btn btn-sm btn-raised btn-primary">Emoji</button>
-                        </div>
-                        <div className="input-group-append">
-                            <button type="submit" className="btn btn-raised btn-sm btn-primary">Add comment</button>
-                        </div>
-                    </div>
-                </form>
-                {showPicker ? <Picker onEmojiClick={this.onEmojiClick} /> : ""}
-
-
-                <div className="alert alert-danger" style={{ display: error ? "" : "none" }}>
-                    {error}
-                </div>
-                <div className="col-md-12">
-                    <h3 className="text-primary">{comments.length} Comments</h3>
-                    <hr />
-                    {comments.reverse().map((comment, i) => (
-                        <div key={i}>
+                <h4 className="mt-5 mb-5">
+                    Leave a comment <span className="pull-right">{comments.length} comments</span>
+                </h4>
+                <div className="panel-body">
+                    <form onSubmit={this.addComment}>
+                        <div className="input-group">
+                            <input
+                                className="form-control"
+                                type="text"
+                                onChange={this.handleChange}
+                                value={text}
+                                placeholder="Leave a comment..."
+                            />
                             <div>
+                                <button type="button" onClick={() => this.setState({ showPicker: !showPicker })} className="btn btn-sm btn-primary"><i style={{fontSize: "20px"}} className="far fa-smile"></i></button>
+                            </div>
+                        </div>
+                        <button type="submit" className="btn btn-raised btn-sm btn-info pull-right mt-3 mb-3">Add comment</button>                
+                    </form>
+                    {showPicker ? <Picker onEmojiClick={this.onEmojiClick} /> : ""}
+                    <div className="alert alert-danger mt-5" style={{ display: error ? "" : "none" }}>
+                        {error}
+                    </div>
+
+
+                    <br />
+                    <div className="clearfix"></div>
+                    <hr />
+                        <ul className="media-list">
+                        {comments.reverse().map((comment, i) => (
+                            <li key={i} className="media">
                                 <Link to={`/user/${comment.postedBy._id}`} >
-                                    <img
-                                        style={{ borderRadius: "50%", border: "1px solid black" }}
-                                        className="float-left mr-2"
-                                        height="30px"
-                                        width="30px"
+                                    <img 
                                         src={`${process.env.REACT_APP_API_URL}/user/photo/${comment.postedBy._id}`}
                                         onError={i => (i.target.src = DefaultProfile)}
                                         alt={comment.postedBy.name}
+                                        className="rounded-circle z-depth-2 mr-2"
                                     />
                                 </Link>
-                                <div>
-                                    <span>
-                                        {isAuthenticated().user && isAuthenticated().user._id === comment.postedBy._id && (
-                                            <>
-                                                <span onClick={() => this.deleteConfirmed(comment)} className="text-danger float-right mr-1" style={{ cursor: "pointer" }}>
-                                                    Remove
+                                <div className="media-body">
+                                    <span className="text-muted pull-right">
+                                        <small className="text-muted">
+                                            <i className="far fa-clock"></i>{" "+timeDifference(new Date(), new Date(comment.created))}
+                                        </small>
+                                        <br />
+                                        <span>
+                                            {isAuthenticated().user && isAuthenticated().user._id === comment.postedBy._id && (
+                                                <>
+                                                    <span onClick={() => this.deleteConfirmed(comment)} className="text-danger float-right mr-2 mt-2 " style={{ cursor: "pointer" }}>
+                                                        <i className="fas fa-trash"></i>
                                                     </span>
-                                            </>
-                                        )}
+                                                </>
+                                            )}
+                                        </span>
                                     </span>
-                                    <p className="lead">{comment.text}</p>
+                                <Link to={`/user/${comment.postedBy._id}`} >
+                                    <strong className="text-success">{comment.postedBy.name}</strong>
+                                </Link>
+                                    <p>
+                                        {comment.text}
+                                    </p>
                                 </div>
-
-                                <p className="font-italic mark">
-                                    Posted by <Link to={`/user/${comment.postedBy._id}`}>{comment.postedBy.name}</Link>{" "} on {new Date(comment.created).toDateString()}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
+                            </li>
+                        ))}
+                    </ul>
                 </div>
             </div>
         );

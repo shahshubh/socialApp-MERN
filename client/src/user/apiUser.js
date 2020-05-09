@@ -127,3 +127,31 @@ export const getChats = (senderId,recieverId) => {
     })
     .catch(err => console.log(err))
 }
+
+export const getChatList = (senderId) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/chatlist/${senderId}`, {
+        method: "GET",
+        headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+        }
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err))
+}
+
+// export const getOnlineUsers = () => {
+//     return fetch(`${process.env.REACT_APP_API_URL}/online/users`, {
+//         method: "GET",
+//         headers: {
+//             Accept: "application/json",
+//             "Content-Type": "application/json",
+//         }
+//     })
+//     .then(response => {
+//         return response.json();
+//     })
+//     .catch(err => console.log(err))
+// }

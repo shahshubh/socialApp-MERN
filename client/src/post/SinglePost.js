@@ -6,7 +6,11 @@ import Loading from '../loading/Loading';
 import { isAuthenticated } from "../auth";
 
 import Comment from './Comment';
+import DefaultProfile from '../images/avatar.jpg'
+import {timeDifference} from './timeDifference';
 
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
 
 
 class SinglePost extends Component {
@@ -85,10 +89,19 @@ class SinglePost extends Component {
     }
 
     deleteConfirmed = () => {
-        let answer = window.confirm("Are you sure you want to delete this post?");
-        if(answer){
-            this.deletePost();
-        }
+        confirmAlert({
+            title: 'Are you sure ?',
+            message: 'you want to delete this post.',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => this.deletePost()
+                },
+                {
+                    label: 'No',
+                }
+            ]
+        });
     }
     
 
@@ -103,28 +116,56 @@ class SinglePost extends Component {
         } else if(redirectToSignin){
             return <Redirect to='/signin'></Redirect>
         }
-
-        return (
-            <div className="card-body">
-                <img
-                    className="img-thumbnail mb-3"
-                    style={{ height: "500px", width: "100%", objectFit: "cover" }}
-                    src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
-                    alt={post.title}
-                />
+        return(
+            <div className="card col-md-12 mb-5" style={{ padding: "0" }} >
+                <div className="card-header">
+                    <img 
+                        className="mb-1 mr-2"
+                        style={{ height: "40px", width: "40px", borderRadius: "50%"  }} 
+                        src={`${process.env.REACT_APP_API_URL}/user/photo/${posterId}`}
+                        onError={i => (i.target.src = DefaultProfile)} 
+                        alt={posterName}
+                    />
+                    <Link to={`/user/${posterId}`} style={{fontSize: "24px"}}>
+                            {posterName}
+                    </Link>
+                    <p
+                        style={{ marginBottom: "0" }}
+                        className="pull-right mt-2"
+                    >
+                        <span className="ml-2">
+                            <i className="far fa-clock"></i>{" "+timeDifference(new Date(), new Date(post.created))}
+                        </span>
+                    </p>
+                </div>
+                <Link to={`/post/${post._id}`}>
+                    <img 
+                        className="card-img-top" 
+                        src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
+                        alt={post.title}
+                        style={{ 
+                            maxHeight: "700px",  
+                            backgroundSize: "cover",
+                            backgroundRepeat: 'no-repeat',
+                            backgroundPosition: "50% 50%" }}
+                    />
+                </Link>
+                    {like ? (
+                        <h3>
+                            <i onClick={this.likeToggle} className="fa fa-heart" style={{color: "red", padding: "10px"}} aria-hidden="true"></i>
+                            <i className="far fa-comments ml-3"></i> 
+                        </h3>
+                    ) : (
+                        <h3>
+                            <i onClick={this.likeToggle} className="fa fa-heart-o" style={{padding: "10px"}} aria-hidden="true"></i>
+                            <i className="far fa-comments ml-3"></i> 
+                        </h3>
+                    )}
+                    <span style={{fontSize: "20px"}} className="ml-3" >{likes} Likes </span>
                 
-                {like ? (
-                    <h3 onClick={this.likeToggle}><i className="fa fa-heart" style={{color: "red", padding: "10px"}} aria-hidden="true"></i>{likes} Likes</h3>
-                ) : (
-                    <h3 onClick={this.likeToggle}><i className="fa fa-heart-o" style={{padding: "10px"}} aria-hidden="true"></i>{likes} Likes</h3>
-                )}
-
-                <p className="card-text">{post.body}</p>
-                <br />
-                <p className="font-italic mark">
-                    Posted by <Link to={`/user/${posterId}`}>{posterName}</Link>{" "} on {new Date(post.created).toDateString()}
-                </p>
-                <div className="d-inline-block">
+                <div className="card-body">
+                    <h5 className="card-title">{post.title}</h5>
+                    <p className="card-text">{post.body}</p>
                     <Link
                         to={`/`}
                         className="btn btn-raised btn-sm btn-primary mr-5">
@@ -142,18 +183,60 @@ class SinglePost extends Component {
                             </button>
                         </>
                     )}
+                    <Comment postId={post._id} comments={comments.reverse()} updateComments={this.updateComments} />
                 </div>
-                {/* reverse comment so that latest conmments appear above on top */}
-                <Comment postId={post._id} comments={comments.reverse()} updateComments={this.updateComments} />
             </div>
         );
+
+        // return (
+        //     <div className="card-body">
+        //         <img
+        //             className="img-thumbnail mb-3"
+        //             style={{ height: "500px", width: "100%", objectFit: "cover" }}
+        //             src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
+        //             alt={post.title}
+        //         />
+                
+        //         {like ? (
+        //             <h3 onClick={this.likeToggle}><i className="fa fa-heart" style={{color: "red", padding: "10px"}} aria-hidden="true"></i>{likes} Likes</h3>
+        //         ) : (
+        //             <h3 onClick={this.likeToggle}><i className="fa fa-heart-o" style={{padding: "10px"}} aria-hidden="true"></i>{likes} Likes</h3>
+        //         )}
+
+        //         <p className="card-text">{post.body}</p>
+        //         <br />
+        //         <p className="font-italic mark">
+        //             Posted by <Link to={`/user/${posterId}`}>{posterName}</Link>{" "} on {new Date(post.created).toDateString()}
+        //         </p>
+        //         <div className="d-inline-block">
+        //             <Link
+        //                 to={`/`}
+        //                 className="btn btn-raised btn-sm btn-primary mr-5">
+        //                 Back to posts
+        //             </Link>
+        //             {isAuthenticated().user && isAuthenticated().user._id === post.postedBy._id && (
+        //                 <>
+        //                     <Link
+        //                         to={`/post/edit/${post._id}`}
+        //                         className="btn btn-raised btn-sm btn-warning mr-5">
+        //                             Edit Post
+        //                     </Link>
+        //                     <button onClick={this.deleteConfirmed} className="btn btn-raised btn-sm btn-danger">
+        //                         Delete Post
+        //                     </button>
+        //                 </>
+        //             )}
+        //         </div>
+        //         {/* reverse comment so that latest conmments appear above on top */}
+        //         <Comment postId={post._id} comments={comments.reverse()} updateComments={this.updateComments} />
+        //     </div>
+        // );
     }
 
     render() {
         const { post } = this.state;
         return (
             <div className="container">
-                <h2 className="display-2 mt-5 mb-5">{post.title}</h2>
                 {!post ? (
                     <Loading />
                 ) : (
