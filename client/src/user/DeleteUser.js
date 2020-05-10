@@ -4,6 +4,9 @@ import { remove } from './apiUser';
 import { signout } from '../auth/index';
 import { Redirect } from 'react-router-dom';
 
+import { confirmAlert } from 'react-confirm-alert';
+import 'react-confirm-alert/src/react-confirm-alert.css';
+
 class DeleteUser extends Component {
 
     state = {
@@ -25,10 +28,19 @@ class DeleteUser extends Component {
     };
 
     deleteConfirmed = () => {
-        let answer = window.confirm("Are you sure you want to delete your account?");
-        if(answer){
-            this.deleteAccount();
-        }
+        confirmAlert({
+            title: 'Are you sure ?',
+            message: 'you want to delete this account.',
+            buttons: [
+                {
+                    label: 'Yes',
+                    onClick: () => this.deleteAccount()
+                },
+                {
+                    label: 'No',
+                }
+            ]
+        });
     }
 
     render() {

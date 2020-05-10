@@ -28,8 +28,8 @@ export const update = (postId, token, post) => {
     .catch(err => console.log(err))
 };
 
-export const list = () => {
-    return fetch(`${process.env.REACT_APP_API_URL}/posts`, {
+export const list = (skip) => {
+    return fetch(`${process.env.REACT_APP_API_URL}/posts?skip=${skip}`, {
         method: "GET"
     })
     .then(response => {
@@ -38,6 +38,16 @@ export const list = () => {
     .catch(err => console.log(err))
 };
 
+
+export const countTotalPosts = () => {
+    return fetch(`${process.env.REACT_APP_API_URL}/count/posts`, {
+        method: "GET"
+    })
+    .then(response => {
+        return response.json();
+    })
+    .catch(err => console.log(err))
+}
 
 export const singlePost = (postId) => {
     return fetch(`${process.env.REACT_APP_API_URL}/post/${postId}`, {

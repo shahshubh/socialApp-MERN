@@ -77,7 +77,6 @@ class Chat extends Component {
             if (newChat.sender._id === recieverId || newChat.sender._id === senderId) {
                 this.setState({ messages: [...this.state.messages, newChat] })
             }
-            this.setState({ loading: false });
         });
 
     }
@@ -100,7 +99,6 @@ class Chat extends Component {
     }
 
     sendMessage = (e) => {
-        this.setState({ loading: true });
         e.preventDefault();
         const { message, sender, reciever } = this.state;
         if (message) {
@@ -136,8 +134,8 @@ class Chat extends Component {
             return <li key={i} className="chat-right">
                 <div className="chat-hour">
                     { DisplayTime12Hour(new Date(chat.time)) }
-                    <br />
-                    {new Date(chat.time).getDate()} / {new Date(chat.time).getMonth()+1} / {new Date(chat.time).getFullYear()}
+                    {/* <br /> */}
+                    {/* {new Date(chat.time).getDate()} / {new Date(chat.time).getMonth()+1} / {new Date(chat.time).getFullYear()} */}
                     <span className="fa fa-check-circle ml-1"></span>
                 </div>
                 <div className="chat-text">
@@ -147,11 +145,7 @@ class Chat extends Component {
         } else {
             return <li key={i} className="chat-left">
                 <div className="chat-avatar">
-                    <img
-                        src={`${process.env.REACT_APP_API_URL}/user/photo/${chat.sender._id}`}
-                        onError={i => (i.target.src = DefaultProfile)}
-                        alt={chat.sender.name} 
-                    />
+
                     <div className="chat-name">{chat.sender.name}</div>
                 </div>
                 <div className="chat-text">
@@ -172,11 +166,6 @@ class Chat extends Component {
         return (
             
             <div className="container mb-5">
-                { loading ? 
-                    (<Loading />) 
-                    : 
-                    ("")
-                }
                 <div className="page-title">
                     <div className="row gutters">
                         <div className="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-12">
@@ -184,13 +173,18 @@ class Chat extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="content-wrapper">
+                { loading ? 
+                    (<Loading />) 
+                    : 
+                    ("")
+                }
+                <div className="content-wrapper" style={{ display: loading ? "none" : "" }}>
                     <div className="row gutters">
                         <div className="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
-                            <div className="card m-0">
+                            <div className="card card-chat m-0">
                                 <div className="row no-gutters">
                                     <div className="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-3">
-                                        <div className="users-container">
+                                        <div className="users-container" style={{ minHeight: "500px" }}>
                                             <div className="chat-search-box">
                                                 <div className="input-group">
                                                     <input className="form-control" placeholder="Search" />

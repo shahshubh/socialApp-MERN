@@ -219,7 +219,7 @@
     position: relative;
     padding: 1rem;
     max-height: 500px;
-    overflow: auto;
+    overflow-y: auto;
 }
 
 .chat-container li.chat-left,
@@ -365,7 +365,7 @@ ul {
     margin: 0;
     padding: 0;
 }
-.card {
+.card-chat {
     border: 0;
     background-image: url('http://demo.thedevelovers.com/dashboard/queenadmin-1.2/assets/img/gray_jean.png?1353438653');
     background-repeat: repeat;

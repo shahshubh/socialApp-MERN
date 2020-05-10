@@ -35,53 +35,55 @@ class FindPeople extends Component {
         const token = isAuthenticated().token;
 
         follow(userId, token, user._id)
-        .then(data => {
-            if(data.error){
-                this.setState({error: data.error})
-            } else {
-                let toFollow = this.state.users;
-                toFollow.splice(i, 1);
-                this.setState({
-                    users: toFollow,
-                    open: true,
-                    followMessage: `Following ${user.name}`
-                })
-            }
-        })
+            .then(data => {
+                if (data.error) {
+                    this.setState({ error: data.error })
+                } else {
+                    let toFollow = this.state.users;
+                    toFollow.splice(i, 1);
+                    this.setState({
+                        users: toFollow,
+                        open: true,
+                        followMessage: `Following ${user.name}`
+                    })
+                }
+            })
     };
 
     renderUsers = (users) => (
         <div className="row">
             {users.map((user, i) => (
-                <div key={i} className="card col-md-4" >
+                <div key={i} className="card col-md-3" style={{ padding: "0", margin: "15px"}} >
                     <img 
-                        style={{ height: "200px", width: "auto" }} 
-                        className="img-thumbnail" 
-                        src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`} 
+                        style={{  }}
+                        height= "250"
+                        width= "250"
+                        className="card-img-top"
+                        src={`${process.env.REACT_APP_API_URL}/user/photo/${user._id}`}
                         onError={i => (i.target.src = DefaultProfile)}
-                        alt={user.name} 
+                        alt={user.name}
                     />
-                    {/* <img 
-                        className="card-img-top" 
-                        src={DefaultProfile} 
-                        alt={user.name} 
-                        style={{width: '100%', height: '15vw', objectFit: 'cover'}}
-                    /> */}
-                        <div className="card-body">
-                            <h5 className="card-title">{user.name}</h5>
-                            <p className="card-text">{user.email}</p>
-                            <Link
-                                to={`/user/${user._id}`}
-                                className="btn btn-raised btn-sm btn-primary">
-                                View Profile
-                            </Link>
-                            <button onClick={() => this.clickFollow(user, i)} className="btn btn-raised btn-info float-right btn-sm">
-                                Follow
-                            </button>
-                        </div>
+                    <div className="card-body">
+                        <h5 className="card-title">{user.name}</h5>
+                    </div>
+                    <div className="card-body">
+                        <Link
+                            to={`/user/${user._id}`}
+                            className="card-link btn btn-raised btn-primary">
+                            View Profile
+                        </Link>
+                        <button style={{ 
+                                        background: "#56ccf2", 
+                                        background: "-webkit-linear-gradient(to left, #56ccf2, #2f80ed)",
+                                        background: "linear-gradient(to left, #56ccf2, #2f80ed)",
+                                        padding: "10px"
+                                    }} onClick={() => this.clickFollow(user, i)} className="btn btn-raised btn-success pull-right">
+                            Follow
+                        </button>
+                    </div>
                 </div>
             ))}
-                </div>
+        </div>
 
             );
 

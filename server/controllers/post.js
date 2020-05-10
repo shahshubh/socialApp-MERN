@@ -22,7 +22,11 @@ exports.postById = (req, res, next, id) => {
 };
 
 exports.getPosts = (req,res) => {
+    const skip = req.query.skip;
+    console.log(skip)
     const posts = Post.find()
+    .skip(parseInt(skip))
+    .limit(5)
     .populate("postedBy", "_id name")
     .populate('comments','text created')
     .populate('comments.postedBy','_id name')
@@ -33,6 +37,14 @@ exports.getPosts = (req,res) => {
     })
     .catch(err => console.log(err));
 };
+
+exports.countPosts = (req,res) => {
+    Post.count()
+    .then((data) => {
+        res.json({data})
+    })
+    .catch(err => console.log(err))
+}
 
 exports.createPost = (req, res, next) => {
     let form = new formidable.IncomingForm();

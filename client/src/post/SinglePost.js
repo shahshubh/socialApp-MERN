@@ -152,12 +152,12 @@ class SinglePost extends Component {
                 </Link>
                     {like ? (
                         <h3>
-                            <i onClick={this.likeToggle} className="fa fa-heart" style={{color: "red", padding: "10px"}} aria-hidden="true"></i>
+                            <i onClick={this.likeToggle} className="fa fa-heart" style={{color: "red", padding: "10px", cursor: "pointer"}} aria-hidden="true"></i>
                             <i className="far fa-comments ml-3"></i> 
                         </h3>
                     ) : (
                         <h3>
-                            <i onClick={this.likeToggle} className="fa fa-heart-o" style={{padding: "10px"}} aria-hidden="true"></i>
+                            <i onClick={this.likeToggle} className="fa fa-heart-o" style={{padding: "10px", cursor: "pointer"}} aria-hidden="true"></i>
                             <i className="far fa-comments ml-3"></i> 
                         </h3>
                     )}

@@ -5,29 +5,36 @@ import { signout, isAuthenticated } from "../auth";
 
 const isActive = (history, path) => {
     if (history.location.pathname === path) {
-        return { color: "#ff9900" }
+        return { borderBottom: "4px solid #ff9900", color: "white" }
     } else {
         return { color: "#ffffff" }
     }
 }
 
 const Menu = (props) => (
-    <div>
-        <ul 
-            className="nav nav-tabs bg-primary mb-5" 
-            style={{ 
-                background: "#007991", 
-                background: "-webkit-linear-gradient(to right, #007991, #78ffd6)",
-                background: "linear-gradient(to right, #007991, #78ffd6)"}}>
-            <li className="nav-item">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light"  
+        style={{ 
+            background: "#007991", 
+            background: "-webkit-linear-gradient(to top, #007991, #78ffd6)",
+            background: "linear-gradient(to top, #007991, #78ffd6)",
+            paddingTop: "15px",
+            paddingBottom: "0"
+        }}
+    >
+        <a class="navbar-brand" style={{ color: "white" }} href="/">SocialApp</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse " id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+            <li className="nav-item ">
                 <Link className="nav-link" style={isActive(props.history, "/")} to='/' >Home</Link>
             </li>
-            <li className="nav-item">
-                <Link className="nav-link" style={isActive(props.history, "/users")} to='/users' >Users</Link>
-            </li>
-
             {!isAuthenticated() && (
                 <>
+                    <li className="nav-item">
+                        <Link className="nav-link" style={isActive(props.history, "/users")} to='/users' >Users</Link>
+                    </li>
                     <li className="nav-item">
                         <Link className="nav-link" style={isActive(props.history, "/signin")} to='/signin' >Sign In</Link>
                     </li>
@@ -38,8 +45,6 @@ const Menu = (props) => (
             )}
             {isAuthenticated() && (
                 <>
-                
-
                     <li className="nav-item">
                         <Link
                             className="nav-link"
@@ -59,7 +64,15 @@ const Menu = (props) => (
                             Create Post
                         </Link>
                     </li> 
-
+                    <li className="nav-item">
+                        <Link
+                            className="nav-link"
+                            to={`/chats/${isAuthenticated().user._id}`}
+                            style={isActive(props.history, `/chats/${isAuthenticated().user._id}`)}
+                        >
+                            Chats
+                        </Link>
+                    </li>
                     <li className="nav-item">
                         <Link
                             className="nav-link"
@@ -69,9 +82,6 @@ const Menu = (props) => (
                             {`${isAuthenticated().user.name}'s profile`}
                         </Link>
                     </li>
-
-                    
-
                     <li className="nav-item">
                         <span
                             className="nav-link"
@@ -87,7 +97,8 @@ const Menu = (props) => (
                 </>
             )}
         </ul>
-    </div>
+        </div>
+    </nav>    
 );
 
 export default withRouter(Menu);
