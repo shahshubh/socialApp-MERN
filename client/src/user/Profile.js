@@ -191,7 +191,7 @@ class Profile extends Component {
                                 {posts.map((post, i) => (
                                     <div key={i} style={{ paddingBottom: "15px" }} className="col-md-4">
                                         <Link to={`/post/${post._id}`} >
-                                            <figure class="snip1205 red">
+                                            <figure className="snip1205 red">
                                                 <img 
                                                     style={{ objectFit: "cover", padding: "0" }}
                                                     height="200"
@@ -199,7 +199,7 @@ class Profile extends Component {
                                                     src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
                                                     alt={post.title} 
                                                 />
-                                                <i class="fas fa-heart">
+                                                <i className="fas fa-heart">
                                                     <br />
                                                     <span style={{ color: "white", fontSize: "20px" }} >{post.likes.length}</span>
                                                 </i>

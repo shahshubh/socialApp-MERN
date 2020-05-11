@@ -64,7 +64,7 @@ class Posts extends Component {
                         const posterName = post.postedBy ? post.postedBy.name : " Unknown";
                         return (
                             <div key={i} className="card col-md-12 mb-5" style={{ padding: "0" }} >
-                                <div class="card-header">
+                                <div className="card-header">
                                     <img
                                         className="mb-1 mr-2"
                                         style={{ height: "40px", width: "40px", borderRadius: "50%" }}
@@ -80,13 +80,13 @@ class Posts extends Component {
                                         className="pull-right mt-2"
                                     >
                                         <span className="ml-2">
-                                            <i class="far fa-clock"></i>{" " + timeDifference(new Date(), new Date(post.created))}
+                                            <i className="far fa-clock"></i>{" " + timeDifference(new Date(), new Date(post.created))}
                                         </span>
                                     </p>
                                 </div>
                                 <Link to={`/post/${post._id}`}>
                                     <img
-                                        class="card-img-top"
+                                        className="card-img-top"
                                         src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
                                         alt={post.title}
                                         style={{
@@ -97,9 +97,9 @@ class Posts extends Component {
                                         }}
                                     />
                                 </Link>
-                                <div class="card-body">
-                                    <h5 class="card-title">{post.title}</h5>
-                                    <p class="card-text">{post.body}</p>
+                                <div className="card-body">
+                                    <h5 className="card-title">{post.title}</h5>
+                                    <p className="card-text">{post.body}</p>
                                     <Link
                                         style={{
                                             background: "#56ccf2",
