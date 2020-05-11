@@ -132,9 +132,12 @@ class Signin extends Component {
         return (
             <div className="container">
                 <h2 className="mt-5 mb-5">Sign In</h2>
-                <hr />
                 <SocialLogin />
                 <hr />
+                <p className="text-center text-muted" style={{fontSize: "24px"}} >OR</p>
+                <hr />
+                <hr />
+
                 <div className="alert alert-danger" style={{ display: error ? "" : "none" }}>
                     {error}
                 </div>

@@ -22,7 +22,8 @@ class SinglePost extends Component {
             redirectToSignin: false,
             like: false,
             likes: 0,
-            comments: []
+            comments: [],
+            loading: false
         }
     }
 
@@ -54,8 +55,9 @@ class SinglePost extends Component {
     };
 
     likeToggle = () => {
+        this.setState({ loading: true })
         if(!isAuthenticated()){
-            this.setState({ redirectToSignin: true })
+            this.setState({ redirectToSignin: true, loading: false })
             return false; //so that rest of code isn't executed
         }
         let callApi = this.state.like ? unlike : like;
@@ -69,7 +71,8 @@ class SinglePost extends Component {
             } else {
                 this.setState({
                     like: !this.state.like,
-                    likes: data.likes.length
+                    likes: data.likes.length,
+                    loading: false
                 });
             }
         });
@@ -187,57 +190,13 @@ class SinglePost extends Component {
                 </div>
             </div>
         );
-
-        // return (
-        //     <div className="card-body">
-        //         <img
-        //             className="img-thumbnail mb-3"
-        //             style={{ height: "500px", width: "100%", objectFit: "cover" }}
-        //             src={`${process.env.REACT_APP_API_URL}/post/photo/${post._id}`}
-        //             alt={post.title}
-        //         />
-                
-        //         {like ? (
-        //             <h3 onClick={this.likeToggle}><i className="fa fa-heart" style={{color: "red", padding: "10px"}} aria-hidden="true"></i>{likes} Likes</h3>
-        //         ) : (
-        //             <h3 onClick={this.likeToggle}><i className="fa fa-heart-o" style={{padding: "10px"}} aria-hidden="true"></i>{likes} Likes</h3>
-        //         )}
-
-        //         <p className="card-text">{post.body}</p>
-        //         <br />
-        //         <p className="font-italic mark">
-        //             Posted by <Link to={`/user/${posterId}`}>{posterName}</Link>{" "} on {new Date(post.created).toDateString()}
-        //         </p>
-        //         <div className="d-inline-block">
-        //             <Link
-        //                 to={`/`}
-        //                 className="btn btn-raised btn-sm btn-primary mr-5">
-        //                 Back to posts
-        //             </Link>
-        //             {isAuthenticated().user && isAuthenticated().user._id === post.postedBy._id && (
-        //                 <>
-        //                     <Link
-        //                         to={`/post/edit/${post._id}`}
-        //                         className="btn btn-raised btn-sm btn-warning mr-5">
-        //                             Edit Post
-        //                     </Link>
-        //                     <button onClick={this.deleteConfirmed} className="btn btn-raised btn-sm btn-danger">
-        //                         Delete Post
-        //                     </button>
-        //                 </>
-        //             )}
-        //         </div>
-        //         {/* reverse comment so that latest conmments appear above on top */}
-        //         <Comment postId={post._id} comments={comments.reverse()} updateComments={this.updateComments} />
-        //     </div>
-        // );
     }
 
     render() {
-        const { post } = this.state;
+        const { post, loading } = this.state;
         return (
             <div className="container">
-                {!post ? (
+                {(!post || loading) ? (
                     <Loading />
                 ) : (
                     this.renderPost(post)

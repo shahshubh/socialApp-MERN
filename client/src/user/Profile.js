@@ -38,6 +38,7 @@ class Profile extends Component {
 
 
     clickFollowButton = callApi => {
+        this.setState({ loading: true })
         const userId = isAuthenticated().user._id;
         const token = isAuthenticated().token;
         callApi(userId, token, this.state.user._id)
@@ -46,7 +47,7 @@ class Profile extends Component {
                     
                     this.setState({ error: data.error })
                 } else {
-                    this.setState({ user: data, following: !this.state.following })
+                    this.setState({ user: data, following: !this.state.following, loading: false })
                 }
             })
     }

@@ -5,6 +5,7 @@ import DefaultProfile from '../images/avatar.jpg';
 import { Link } from 'react-router-dom';
 import { isAuthenticated } from '../auth/index';
 
+import Loading from '../loading/Loading';
 
 class FindPeople extends Component {
     constructor() {
@@ -13,11 +14,13 @@ class FindPeople extends Component {
             users: [],
             error: "",
             open: false,
-            followMessage: ""
+            followMessage: "",
+            loading: false
         }
     }
 
     componentDidMount() {
+        this.setState({loading: true})
         const userId = isAuthenticated().user._id;
         const token = isAuthenticated().token;
         findPeople(userId, token)
@@ -25,12 +28,13 @@ class FindPeople extends Component {
                 if (data.error) {
                     console.log(data.error)
                 } else {
-                    this.setState({ users: data });
+                    this.setState({ users: data, loading: false });
                 }
             })
     }
 
     clickFollow = (user, i) => {
+        this.setState({loading: true})
         const userId = isAuthenticated().user._id;
         const token = isAuthenticated().token;
 
@@ -44,7 +48,8 @@ class FindPeople extends Component {
                     this.setState({
                         users: toFollow,
                         open: true,
-                        followMessage: `Following ${user.name}`
+                        followMessage: `Following ${user.name}`,
+                        loading: false
                     })
                 }
             })
@@ -88,16 +93,20 @@ class FindPeople extends Component {
             );
 
     render(){
-        const {users, open, followMessage} = this.state;
+        const {users, open, followMessage, loading} = this.state;
         return(
             <div className="container">
                 <h2 className="mt-5 mb-5">Find People</h2>
                 {open && (
-                    <div className="alert alert-success">
-                        <p>{followMessage}</p>
+                    <div className="alert alert-success text-center">
+                        {followMessage}
                     </div>
                 )}
-                {this.renderUsers(users)}
+                {loading ? (
+                    <Loading />
+                ) : (
+                    this.renderUsers(users)
+                )}
             </div>
         );
     }

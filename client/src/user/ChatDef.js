@@ -71,7 +71,7 @@ class Chat extends Component {
                                 <div className="row no-gutters">
                                     <div className="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-3">
                                         <div className="users-container" style={{ minHeight: "500px" }}>
-                                            <div className="chat-search-box">
+                                            {/* <div className="chat-search-box">
                                                 <div className="input-group">
                                                     <input className="form-control" placeholder="Search" />
                                                     <div className="input-group-btn">
@@ -80,8 +80,13 @@ class Chat extends Component {
                                                         </button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                             <ul className="users" style={{ display: loading ? "none" : "" }} >
+                                                { chatList.length === 0 ? (
+                                                    <p>
+                                                        No chats. Go to someone's profile from Find people tab or from your followers/following tab and click message button them start chatting.
+                                                    </p>
+                                                ) : ("") }
                                                 { chatList.map((user, i) => (
                                                     <a key={i} href={`/chat/${sender._id}/${user._id}`}>
                                                         <li className="person" data-chat="person1">

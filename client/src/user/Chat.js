@@ -6,7 +6,6 @@ import { isAuthenticated } from "../auth";
 import ScrollToBottom from 'react-scroll-to-bottom';
 
 import '../css/Chat.css'
-import { Link } from 'react-router-dom';
 import DefaultProfile from '../images/avatar.jpg';
 
 import {DisplayTime12Hour} from '../post/timeDifference';
@@ -153,8 +152,8 @@ class Chat extends Component {
                 </div>
                 <div className="chat-hour">
                     { DisplayTime12Hour(new Date(chat.time)) }
-                    <br />
-                    {new Date(chat.time).getDate()} / {new Date(chat.time).getMonth()+1} / {new Date(chat.time).getFullYear()}
+                    {/* <br /> */}
+                    {/* {new Date(chat.time).getDate()} / {new Date(chat.time).getMonth()+1} / {new Date(chat.time).getFullYear()} */}
                     <span className="fa fa-check-circle ml-1"></span>
                 </div>
             </li>
@@ -162,7 +161,7 @@ class Chat extends Component {
     }
 
     render() {
-        const { chatList, messages, reciever, sender, message, showPicker, loading } = this.state;
+        const { chatList, messages, reciever, sender, showPicker, loading } = this.state;
         return (
             
             <div className="container mb-5">
@@ -185,7 +184,7 @@ class Chat extends Component {
                                 <div className="row no-gutters">
                                     <div className="col-xl-4 col-lg-4 col-md-4 col-sm-3 col-3">
                                         <div className="users-container" style={{ minHeight: "500px" }}>
-                                            <div className="chat-search-box">
+                                            {/* <div className="chat-search-box">
                                                 <div className="input-group">
                                                     <input className="form-control" placeholder="Search" />
                                                     <div className="input-group-btn">
@@ -194,7 +193,7 @@ class Chat extends Component {
                                                         </button>
                                                     </div>
                                                 </div>
-                                            </div>
+                                            </div> */}
                                             <ul className="users" style={{ display: loading ? "none" : "" }} >
                                                 { chatList.map((user, i) => (
                                                     <a key={i} href={`/chat/${sender._id}/${user._id}`}>

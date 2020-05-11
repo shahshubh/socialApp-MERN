@@ -26,7 +26,7 @@ exports.getPosts = (req,res) => {
     console.log(skip)
     const posts = Post.find()
     .skip(parseInt(skip))
-    .limit(5)
+    .limit(2)
     .populate("postedBy", "_id name")
     .populate('comments','text created')
     .populate('comments.postedBy','_id name')

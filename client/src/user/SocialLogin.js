@@ -38,15 +38,26 @@ class SocialLogin extends Component {
         if (redirectToReferrer) {
             return <Redirect to="/" />;
         }
-
-        return (
-            <GoogleLogin
-                clientId="679380407525-2cvoah9gpsjjffc5k1p6atahhf2vqfl4.apps.googleusercontent.com"
-                buttonText="Login with Google"
-                onSuccess={this.responseGoogle}
-                onFailure={this.responseGoogle}
-            />
-        );
+        if(this.props.for === "signup"){
+            return (
+                <GoogleLogin
+                    clientId="679380407525-2cvoah9gpsjjffc5k1p6atahhf2vqfl4.apps.googleusercontent.com"
+                    buttonText="Signup with Google"
+                    onSuccess={this.responseGoogle}
+                    onFailure={this.responseGoogle}
+                />
+            );
+        } else {
+            return (
+                <GoogleLogin
+                    clientId="679380407525-2cvoah9gpsjjffc5k1p6atahhf2vqfl4.apps.googleusercontent.com"
+                    buttonText="Login with Google"
+                    onSuccess={this.responseGoogle}
+                    onFailure={this.responseGoogle}
+                />
+            );
+        }
+        
     }
 }
 

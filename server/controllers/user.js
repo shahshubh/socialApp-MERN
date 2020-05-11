@@ -8,6 +8,7 @@ exports.userById = (req, res, next, id) => {
     User.findById(id)
     .populate('following','_id name')
     .populate('followers','_id name')
+    .select('name email created about following followers')
     .exec((err, user) => {
         if(err || !user){
             return res.status(400).json({
@@ -96,11 +97,18 @@ exports.updateUser = (req,res,next) => {
 };
 
 exports.userPhoto = (req, res, next) => {
-    if(req.profile.photo.data){
-        res.set("Content-Type", req.profile.photo.contentType);
-        return res.send(req.profile.photo.data);
-    }
-    next();
+    User.findById(req.params.userId, (err, user) => {
+        if(err || !user){
+            res.status(400).json({
+                error: err
+            })
+        }
+        if(user.photo.data){
+            res.set("Content-Type", user.photo.contentType);
+            return res.send(user.photo.data);
+        }
+        next();
+    })
 };
 
 exports.deleteUser = (req, res, next) => {
