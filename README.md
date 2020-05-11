@@ -20,23 +20,23 @@ A Social Networking web app similar to Instagram.
 <div align="center">
 
 <h4 align="center">Home Page</h4>
-<img src="./demo/home.png" width=900px/>
+<img src="./demo/home.PNG" width=900px/>
 <br>
 <h4 align="center">Comments</h4>
-<img src="./demo/comments.png" width=900px/>
+<img src="./demo/comments.PNG" width=900px/>
 <br>
 <h4 align="center">Profile Page</h4>
 <img src="./demo/profile.png" width=900px/>
 <br>
 <h4 align="center">Confirm</h4>
-<img src="./demo/confirm.png" width=900px/>
+<img src="./demo/confirm.PNG" width=900px/>
 <br>
 <h4 align="center">Chat</h4>
 
 ![demovideo](./demo/chat.gif)
 <br>
 <h4 align="center">Reset Password</h4>
-<img src="./demo/resetpassword.png" width=900px/>
+<img src="./demo/resetpassword.PNG" width=900px/>
 <br>
 
 
