@@ -6,14 +6,14 @@
  [![](https://img.shields.io/badge/Made_with-ReactJS-blue?style=for-the-badge&logo=react)](https://reactjs.org/docs/getting-started.html)
 [![](https://img.shields.io/badge/Database-MongoDB-red?style=for-the-badge&logo=mongodb)](mongodb.com "MongoDB")
 [![](https://img.shields.io/badge/IDE-Visual_Studio_Code-red?style=for-the-badge&logo=visual-studio-code)](https://code.visualstudio.com/  "Visual Studio Code")
-[![](https://img.shields.io/badge/Deployed_on-Netlify-red?style=for-the-badge&logo=netlify)](https://www.netlify.com/  "Netlify")
+[![](https://img.shields.io/badge/Deployed_on-Heroku-red?style=for-the-badge&logo=heroku)](https://www.heroku.com/  "Netlify")
 </div>
 
 A Social Networking web app similar to Instagram.
 
 ## Deployed website
 
-[]()
+[https://sociallappp.herokuapp.com/](https://sociallappp.herokuapp.com/)
 
 ## Demo 
 

@@ -7,6 +7,7 @@ import '../css/Chat.css'
 import DefaultProfile from '../images/avatar.jpg';
 
 import Loading from '../loading/Loading';
+import { Link } from 'react-router-dom';
 
 class Chat extends Component {
     constructor() {
@@ -83,8 +84,14 @@ class Chat extends Component {
                                             </div> */}
                                             <ul className="users" style={{ display: loading ? "none" : "" }} >
                                                 { chatList.length === 0 ? (
-                                                    <p>
-                                                        No chats. Go to someone's profile from Find people tab or from your followers/following tab and click message button them start chatting.
+                                                    <p className="text-center p-2">
+                                                        <strong>No chats found. </strong>
+                                                        <br />
+                                                        Go to someone's profile from 
+                                                        <Link to="/findpeople"> Find people </Link>
+                                                        tab or from your 
+                                                        <Link to={`/user/${isAuthenticated().user._id}`} > followers/following </Link>
+                                                        tab and click message button to start chatting.
                                                     </p>
                                                 ) : ("") }
                                                 { chatList.map((user, i) => (
