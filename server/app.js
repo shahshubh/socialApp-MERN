@@ -1,10 +1,9 @@
 const express = require('express');
 const http = require("http");
-const socketio = require("socket.io");
 const app = express();
 
 const server =http.createServer(app);
-const io = socketio(server);
+const io = require("socket.io").listen(server);
 
 const mongoose = require('mongoose');
 const morgan = require('morgan');

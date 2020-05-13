@@ -12,7 +12,7 @@ import {DisplayTime12Hour} from '../post/timeDifference';
 import Picker from 'emoji-picker-react';
 import Loading from '../loading/Loading';
 
-const socketUrl = "http://localhost:8080/";
+const socketUrl = `${process.env.REACT_APP_API_URL}`;
 let socket;
 
 class Chat extends Component {
