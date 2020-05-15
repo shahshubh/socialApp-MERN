@@ -6,7 +6,7 @@
  [![](https://img.shields.io/badge/Made_with-ReactJS-blue?style=for-the-badge&logo=react)](https://reactjs.org/docs/getting-started.html)
 [![](https://img.shields.io/badge/Database-MongoDB-red?style=for-the-badge&logo=mongodb)](mongodb.com "MongoDB")
 [![](https://img.shields.io/badge/IDE-Visual_Studio_Code-red?style=for-the-badge&logo=visual-studio-code)](https://code.visualstudio.com/  "Visual Studio Code")
-[![](https://img.shields.io/badge/Deployed_on-Heroku-red?style=for-the-badge&logo=heroku)](https://www.heroku.com/  "Netlify")
+[![](https://img.shields.io/badge/Deployed_on-Heroku-red?style=for-the-badge&logo=heroku)](https://www.heroku.com/  "Heroku")
 </div>
 
 A Social Networking web app similar to Instagram.
@@ -42,7 +42,7 @@ A Social Networking web app similar to Instagram.
 
 </div>
 
-### To run the project locally
+## To run the project locally
 
 * clone this Repository by `git clone https://github.com/shahshubh/socialApp-MERN.git`.
 * Inside /server directory create a .env file and add these
@@ -58,7 +58,7 @@ A Social Networking web app similar to Instagram.
 * Change the directory to /client in the terminal and run:
     - `npm install`
     - `npm start`
-* Open your browser and enter url `localhost:3000`
+* Open your browser and enter url `http://localhost:3000`
 
 ## Tech Stack of this Project
 
