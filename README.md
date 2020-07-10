@@ -15,6 +15,18 @@ A Social Networking web app similar to Instagram.
 
 [https://sociallappp.herokuapp.com/](https://sociallappp.herokuapp.com/)
 
+## Features
+
+* SignUp / SignIn.
+* Forgot password.
+* Google Oauth Login.
+* edit / delete your profile.
+* Follow / Unfollow users.
+* create / edit / delete posts.
+* create / delete comments.
+* Like / Unlike posts.
+* Personal chat with users.
+
 ## Demo 
 
 <div align="center">
@@ -66,3 +78,12 @@ A Social Networking web app similar to Instagram.
 * Backend: Nodejs
 * Framework: Expressjs
 * Database: MongoDB
+
+
+## Further Work
+
+- [ ] Improve performancem - decrease loading time.
+- [ ] Display status of users online/offline in chat.
+- [ ] Add Notifications when someone follows/messages you or likes/comments on your post. 
+
+
