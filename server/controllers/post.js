@@ -38,6 +38,20 @@ exports.getPosts = (req,res) => {
     .catch(err => console.log(err));
 };
 
+exports.getAllPostsRn = (req,res) => {
+    const posts = Post.find()
+    .populate("postedBy", "_id name")
+    .populate('comments.postedBy', '_id name')
+    .populate('postedBy', '_id name')
+    .select('_id title body created likes comments updated')
+    .sort({created: -1})
+    .then((posts) => {
+        res.json(posts);
+    })
+    .catch(err => console.log(err));
+    
+}
+
 exports.countPosts = (req,res) => {
     Post.count()
     .then((data) => {
@@ -49,6 +63,7 @@ exports.countPosts = (req,res) => {
 exports.createPost = (req, res, next) => {
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
+    console.log(form);
     form.parse(req, (err, fields, files) => {
         if(err){
             return res.status(400).json({
@@ -56,9 +71,11 @@ exports.createPost = (req, res, next) => {
             });
         }
         let post = new Post(fields);
+        console.log(fields);
         req.profile.hashed_password = undefined;
         req.profile.salt = undefined;
         post.postedBy = req.profile;
+        console.log(files);
         if(files.photo){
             post.photo.data = fs.readFileSync(files.photo.path);
             post.photo.contentType = files.photo.type;
@@ -75,10 +92,46 @@ exports.createPost = (req, res, next) => {
     });
 };
 
+exports.createPostRn = (req, res) => {
+    let fields = {};
+    fields.title = req.body.title;
+    fields.body = req.body.body;
+    let post = new Post(fields);
+    console.log(fields);
+    req.profile.hashed_password = undefined;
+    req.profile.salt = undefined;
+    post.postedBy = req.profile;
+    post.photo.data = Buffer.from(req.body.base64Data, 'base64');
+    post.photo.contentType = req.body.imageType;
+
+    post.save((err, result) => {
+        if(err){
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.json(result);
+    });
+};
+
+
+exports.getPostPhotoRn = (req,res) => {
+    var base64 = 'iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAAAAACPAi4CAAAAB3RJTUUH1QEHDxEhOnxCRgAAAAlwSFlzAAAK8AAACvABQqw0mAAAAXBJREFUeNrtV0FywzAIxJ3+K/pZyctKXqamji0htEik9qEHc3JkWC2LRPCS6Zh9HIy/AP4FwKf75iHEr6eU6Mt1WzIOFjFL7IFkYBx3zWBVkkeXAUCXwl1tvz2qdBLfJrzK7ixNUmVdTIAB8PMtxHgAsFNNkoExRKA+HocriOQAiC+1kShhACwSRGAEwPP96zYIoE8Pmph9qEWWKcCWRAfA/mkfJ0F6dSoA8KW3CRhn3ZHcW2is9VOsAgoqHblncAsyaCgcbqpUZQnWoGTcp/AnuwCoOUjhIvCvN59UBeoPZ/AYyLm3cWVAjxhpqREVaP0974iVwH51d4AVNaSC8TRNNYDQEFdlzDW9ob10YlvGQm0mQ+elSpcCCBtDgQD7cDFojdx7NIeHJkqi96cOGNkfZOroZsHtlPYoR7TOp3Vmfa5+49uoSSRyjfvc0A1kLx4KC6sNSeDieD1AWhrJLe0y+uy7b9GjP83l+m68AJ72AwSRPN5g7uwUAAAAAElFTkSuQmCC';
+    var img = Buffer.from(base64, 'base64');
+
+    res.writeHead(200, {
+        'Content-Type': 'image/png',
+        'Content-Length': img.length
+    });
+    res.end(img); 
+}
+
 exports.postsByUser = (req, res) => {
     Post.find({postedBy: req.profile._id})
-    .populate("postedBy","_id name")
-    .select("_id title body created likes")
+    .populate("postedBy", "_id name")
+    .populate('comments.postedBy', '_id name')
+    .populate('postedBy', '_id name')
+    .select('_id title body created likes comments updated')
     .sort({created: -1})
     .exec((err, posts) => {
         if(err){
@@ -126,7 +179,7 @@ exports.updatePost = (req,res,next) => {
         //save post
         let post = req.post;
         post = _.extend(post, fields);
-        post.updateDate = Date.now();
+        post.updated = Date.now();
         
         if(files.photo){
             post.photo.data = fs.readFileSync(files.photo.path);
@@ -142,6 +195,33 @@ exports.updatePost = (req,res,next) => {
         });
     });
 };
+
+
+exports.updatePostRn = (req, res) => {
+    let post = req.post;
+    console.log("ORIG POST ", post);
+    console.log("BODY ", req.body);
+
+    post = _.extend(post, req.body);
+
+    post.updated = Date.now();
+
+    if(req.body.base64Data && req.body.imageType){
+        post.photo.data = Buffer.from(req.body.base64Data, 'base64');
+        post.photo.contentType = req.body.imageType;
+    }
+
+    console.log("UPDATED POST ", post);
+
+    post.save((err, result) => {
+        if(err){
+            return res.status(400).json({
+                error: err
+            });
+        }
+        res.json(result);
+    });
+}
 
 exports.deletePost = (req, res) => {
     let post = req.post;

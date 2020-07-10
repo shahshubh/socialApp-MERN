@@ -38,7 +38,10 @@ exports.allUsers = (req,res) => {
             });
         }
         return res.json(users);
-    }).select("name email updated created");
+    })
+    .select("name email updated created about following followers")
+    .populate('following','_id name')
+    .populate('followers','_id name');
 };
 
 exports.getUser = (req, res) => {
