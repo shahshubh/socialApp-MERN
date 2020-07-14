@@ -16,8 +16,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const PORT = process.env.PORT;  
-
+const PORT = process.env.PORT || 8080;  
 mongoose.set('useNewUrlParser', true);
 mongoose.set('useUnifiedTopology', true);
 mongoose.connect(process.env.MONGO_URI)
