@@ -40,8 +40,8 @@ exports.allUsers = (req,res) => {
         return res.json(users);
     })
     .select("name email updated created about following followers")
-    .populate('following','_id name')
-    .populate('followers','_id name');
+    .populate('following','_id name email')
+    .populate('followers','_id name email');
 };
 
 exports.getUser = (req, res) => {
@@ -80,7 +80,7 @@ exports.updateUser = (req,res,next) => {
         //save user
         let user = req.profile;
         user = _.extend(user, fields);
-        user.updateDate = Date.now();
+        user.updated = Date.now();
         
         if(files.photo){
             user.photo.data = fs.readFileSync(files.photo.path);
@@ -96,6 +96,31 @@ exports.updateUser = (req,res,next) => {
             user.salt = undefined;
             res.json(user);
         });
+    });
+};
+
+
+exports.updateUserRn = (req,res) => {
+    let user = req.profile;
+    console.log(req.body);
+    user = _.extend(user, req.body);
+
+    user.updated = Date.now();
+
+    if(req.body.base64Data && req.body.imageType){
+        user.photo.data = Buffer.from(req.body.base64Data, 'base64');
+        user.photo.contentType = req.body.imageType;
+    }
+
+    user.save((err, result) => {
+        if(err){
+            return res.status(400).json({
+                error: err
+            })
+        }
+        user.hashed_password = undefined;
+        user.salt = undefined;
+        res.json(user);
     });
 };
 
@@ -188,5 +213,5 @@ exports.findPeople = (req, res) => {
         }
         res.json(users);
     })
-    .select("name");
+    .select("name email");
 };

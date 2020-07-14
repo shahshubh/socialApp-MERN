@@ -15,6 +15,14 @@ exports.getChats = (req,res) => {
     });
 };
 
+exports.getAllChatsRn = (req, res) => {
+    Chat.find()
+    .then(chats => {
+        res.json(chats)
+    })
+    .catch(err => console.log(err));
+};
+
 exports.chatList = async (req,res) => {
     const senderId = req.params.senderId;
     let chatList1 = await Chat.distinct("reciever._id",{ 'sender._id': senderId })
@@ -22,7 +30,7 @@ exports.chatList = async (req,res) => {
     let chatList = await chatList1.concat(chatList2);
     let distinctChatList = [...new Set(chatList)]
     User.find({ _id: { $in: distinctChatList } })
-    .select('name email created photo')
+    .select('name email created updated')
     .exec((err,data) => {
         if(err || !data){
             res.status(400).json({

@@ -101,7 +101,7 @@ class Chat extends Component {
         e.preventDefault();
         const { message, sender, reciever } = this.state;
         if (message) {
-            socket.emit('sendMessage', message, sender, reciever, this.state.socket.id, () => {
+            socket.emit('sendMessage', message, sender, reciever, () => {
                 console.log('sent ', message);
                 this.setState({ message: '', showPicker: false })
             })

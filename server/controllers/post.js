@@ -40,9 +40,8 @@ exports.getPosts = (req,res) => {
 
 exports.getAllPostsRn = (req,res) => {
     const posts = Post.find()
-    .populate("postedBy", "_id name")
-    .populate('comments.postedBy', '_id name')
-    .populate('postedBy', '_id name')
+    .populate('comments.postedBy', '_id name updated')
+    .populate('postedBy', '_id name updated')
     .select('_id title body created likes comments updated')
     .sort({created: -1})
     .then((posts) => {
