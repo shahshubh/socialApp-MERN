@@ -39,7 +39,7 @@ exports.allUsers = (req,res) => {
         }
         return res.json(users);
     })
-    .select("name email updated created about following followers")
+    .select("name email updated created about following followers notificationToken")
     .populate('following','_id name email')
     .populate('followers','_id name email');
 };

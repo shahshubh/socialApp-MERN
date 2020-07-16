@@ -33,6 +33,9 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true  
     },
+    notificationToken: {
+        type: String
+    },
     following: [{
         type: ObjectId,
         ref: "User"

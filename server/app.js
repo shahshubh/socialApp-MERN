@@ -50,9 +50,6 @@ const Chat = require('./models/chat');
 io.on('connection', async (socket) => {
     console.log('CLIENT CONNECTED')
     socket.on('userInfo',(user) => {
-        console.log("===============================");
-        console.log("USer OUTER", user);
-        console.log("===============================");
         Socket.findOne({email: user.email}, function(err,res) {
             if(!res){
                 let newSocket = new Socket({
@@ -79,10 +76,6 @@ io.on('connection', async (socket) => {
         })
     })
     socket.on('sendMessage', (message, sender, reciever, callback) => {
-        // console.log('+++++++++++++++++++++++++++++++');
-        // console.log(message);
-        // console.log(message);
-        // console.log(reciever);
         const senderId = sender._id;
         const recieverId = reciever._id;
         Socket.findOne({email: reciever.email})

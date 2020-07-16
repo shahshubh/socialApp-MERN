@@ -103,6 +103,8 @@ exports.createPostRn = (req, res) => {
     post.photo.data = Buffer.from(req.body.base64Data, 'base64');
     post.photo.contentType = req.body.imageType;
 
+    console.log(post);
+
     post.save((err, result) => {
         if(err){
             return res.status(400).json({
@@ -198,9 +200,6 @@ exports.updatePost = (req,res,next) => {
 
 exports.updatePostRn = (req, res) => {
     let post = req.post;
-    console.log("ORIG POST ", post);
-    console.log("BODY ", req.body);
-
     post = _.extend(post, req.body);
 
     post.updated = Date.now();
