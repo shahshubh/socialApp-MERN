@@ -58,7 +58,7 @@ A Social Networking web app similar to Instagram.
 
 * clone this Repository by `git clone https://github.com/shahshubh/socialApp-MERN.git`.
 * Inside /server directory create a .env file and add these
-    - `MONGO_URI=mongodb+srv://socialapp:socialapp@cluster0-o6fur.mongodb.net/test?retryWrites=true&w=majority`
+    - `MONGO_URI=your-mongodb-url`
     - `PORT=8080`
     - `JWT_SECRET=any-random-string-of-any-length`
     - `CLIENT_URL=http://localhost:3000`
